@@ -8,6 +8,8 @@ import Subscription from './pages/Subscription';
 import Profile from './pages/Profile';
 import Preferences from './pages/Preferences';
 import Search from './pages/Search';
+import LanguageSelector from './pages/LanguageSelector';
+import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
@@ -21,9 +23,11 @@ export const PAGES = {
     "Profile": Profile,
     "Preferences": Preferences,
     "Search": Search,
+    "LanguageSelector": LanguageSelector,
 }
 
 export const pagesConfig = {
     mainPage: "Home",
     Pages: PAGES,
+    Layout: __Layout,
 };

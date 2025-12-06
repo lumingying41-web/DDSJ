@@ -18,56 +18,119 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-const plans = [
-  {
-    id: 'monthly',
-    name: '月度会员',
-    price: 68,
-    originalPrice: 98,
-    period: '月',
-    features: [
-      '完整快讯深度解读',
-      '全部个股研报',
-      '机构报告全文',
-      '实时推送提醒',
-      '个性化订阅',
-    ],
-    popular: false,
-  },
-  {
-    id: 'yearly',
-    name: '年度会员',
-    price: 588,
-    originalPrice: 816,
-    period: '年',
-    monthlyPrice: 49,
-    features: [
-      '月度会员全部权益',
-      '优先获取独家研报',
-      '专属客服支持',
-      '投资课程免费看',
-      '线下活动邀请',
-    ],
-    popular: true,
-    savings: '省 228 元',
-  },
-  {
-    id: 'lifetime',
-    name: '终身会员',
-    price: 1888,
-    originalPrice: 2888,
-    period: '永久',
-    features: [
-      '年度会员全部权益',
-      '终身免费升级',
-      '一对一投资咨询',
-      '私密投研社群',
-      '专属定制报告',
-    ],
-    popular: false,
-    savings: '省 1000 元',
-  },
-];
+const getPricing = (region, currency) => {
+  const isChinaRegion = region === 'CN';
+  
+  if (isChinaRegion || currency === 'CNY') {
+    return {
+      currency: '¥',
+      plans: [
+        {
+          id: 'monthly',
+          name: '月度会员',
+          price: 9,
+          originalPrice: 19,
+          period: '月',
+          features: [
+            '完整快讯深度解读',
+            '全部个股研报',
+            '机构报告全文',
+            '实时推送提醒',
+            '个性化订阅',
+          ],
+          popular: false,
+        },
+        {
+          id: 'yearly',
+          name: '年度会员',
+          price: 88,
+          originalPrice: 228,
+          period: '年',
+          monthlyPrice: 7.3,
+          features: [
+            '月度会员全部权益',
+            '优先获取独家研报',
+            '专属客服支持',
+            '投资课程免费看',
+            '线下活动邀请',
+          ],
+          popular: true,
+          savings: '省 140 元',
+        },
+        {
+          id: 'lifetime',
+          name: '终身会员',
+          price: 388,
+          originalPrice: 888,
+          period: '永久',
+          features: [
+            '年度会员全部权益',
+            '终身免费升级',
+            '一对一投资咨询',
+            '私密投研社群',
+            '专属定制报告',
+          ],
+          popular: false,
+          savings: '省 500 元',
+        },
+      ]
+    };
+  } else {
+    return {
+      currency: '$',
+      plans: [
+        {
+          id: 'monthly',
+          name: 'Monthly',
+          price: 2,
+          originalPrice: 4,
+          period: 'month',
+          features: [
+            'Full flash analysis',
+            'All research reports',
+            'Institution reports',
+            'Real-time notifications',
+            'Personalized subscriptions',
+          ],
+          popular: false,
+        },
+        {
+          id: 'yearly',
+          name: 'Annual',
+          price: 19,
+          originalPrice: 48,
+          period: 'year',
+          monthlyPrice: 1.6,
+          features: [
+            'All monthly benefits',
+            'Exclusive research priority',
+            'Dedicated support',
+            'Free investment courses',
+            'Offline events invitation',
+          ],
+          popular: true,
+          savings: 'Save $29',
+        },
+        {
+          id: 'lifetime',
+          name: 'Lifetime',
+          price: 58,
+          originalPrice: 128,
+          period: 'lifetime',
+          features: [
+            'All annual benefits',
+            'Lifetime free upgrade',
+            'One-on-one consultation',
+            'Private research community',
+            'Custom reports',
+          ],
+          popular: false,
+          savings: 'Save $70',
+        },
+      ]
+    };
+  }
+};
 
 const features = [
   {
@@ -98,12 +161,18 @@ export default function Subscription() {
   const [selectedPlan, setSelectedPlan] = useState('yearly');
   const [autoRenew, setAutoRenew] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [region, setRegion] = useState('CN');
+  const [currency, setCurrency] = useState('CNY');
   
   useEffect(() => {
     const loadUser = async () => {
       try {
         const currentUser = await base44.auth.me();
         setUser(currentUser);
+        
+        // Set region and currency from user profile
+        setRegion(currentUser.region || 'CN');
+        setCurrency(currentUser.currency || 'CNY');
         
         const subs = await base44.entities.Subscription.filter({ user_email: currentUser.email });
         if (subs.length > 0) setSubscription(subs[0]);
@@ -113,6 +182,10 @@ export default function Subscription() {
   }, []);
   
   const isPremiumUser = subscription?.plan !== 'free' && subscription?.status === 'active';
+  
+  const pricing = getPricing(region, currency);
+  const plans = pricing.plans;
+  const currencySymbol = pricing.currency;
 
   const handleSubscribe = async (planId) => {
     if (!user) {
@@ -136,6 +209,7 @@ export default function Subscription() {
         start_date: new Date().toISOString().split('T')[0],
         end_date: endDate.toISOString().split('T')[0],
         auto_renew: autoRenew,
+        payment_method: `${currency} - ${region}`
       });
     } else {
       await base44.entities.Subscription.create({
@@ -145,11 +219,21 @@ export default function Subscription() {
         start_date: new Date().toISOString().split('T')[0],
         end_date: endDate.toISOString().split('T')[0],
         auto_renew: autoRenew,
+        payment_method: `${currency} - ${region}`
       });
     }
     
     setIsProcessing(false);
     window.location.reload();
+  };
+  
+  const handleRegionChange = (newRegion) => {
+    setRegion(newRegion);
+    if (newRegion === 'CN') {
+      setCurrency('CNY');
+    } else if (newRegion === 'US') {
+      setCurrency('USD');
+    }
   };
 
   return (
@@ -171,18 +255,55 @@ export default function Subscription() {
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-12"
+          className="text-center mb-8"
         >
           <div className="inline-flex items-center gap-2 bg-amber-500/10 text-amber-400 px-4 py-2 rounded-full text-sm mb-6">
             <Sparkles className="w-4 h-4" />
-            解锁专业投资洞察
+            {region === 'CN' ? '解锁专业投资洞察' : 'Unlock Professional Investment Insights'}
           </div>
           <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            升级 <span className="text-amber-400">Premium</span> 会员
+            {region === 'CN' ? (
+              <>升级 <span className="text-amber-400">Premium</span> 会员</>
+            ) : (
+              <>Upgrade to <span className="text-amber-400">Premium</span></>
+            )}
           </h1>
           <p className="text-lg text-slate-400 max-w-2xl mx-auto">
-            获取完整快讯解读、专业研报、机构报告，让您在投资决策中快人一步
+            {region === 'CN' 
+              ? '获取完整快讯解读、专业研报、机构报告，让您在投资决策中快人一步'
+              : 'Get full flash analysis, professional research, and institutional reports to stay ahead'}
           </p>
+        </motion.div>
+
+        {/* Region/Currency Selector */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="flex justify-center mb-8"
+        >
+          <div className="bg-slate-800/50 border border-slate-700/50 rounded-xl p-1 inline-flex gap-1">
+            <button
+              onClick={() => handleRegionChange('CN')}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                region === 'CN'
+                  ? 'bg-amber-500 text-black'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              🇨🇳 中国大陆 (¥)
+            </button>
+            <button
+              onClick={() => handleRegionChange('US')}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                region === 'US'
+                  ? 'bg-amber-500 text-black'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              🌍 International ($)
+            </button>
+          </div>
         </motion.div>
 
         {/* Current Status */}
@@ -238,14 +359,16 @@ export default function Subscription() {
                 <CardHeader className="pb-4">
                   <CardTitle className="text-lg text-white">{plan.name}</CardTitle>
                   <CardDescription className="flex items-baseline gap-2">
-                    <span className="text-3xl font-bold text-white">¥{plan.price}</span>
+                    <span className="text-3xl font-bold text-white">{currencySymbol}{plan.price}</span>
                     <span className="text-slate-500">/{plan.period}</span>
                     {plan.originalPrice && (
-                      <span className="text-sm text-slate-500 line-through">¥{plan.originalPrice}</span>
+                      <span className="text-sm text-slate-500 line-through">{currencySymbol}{plan.originalPrice}</span>
                     )}
                   </CardDescription>
                   {plan.monthlyPrice && (
-                    <p className="text-sm text-amber-400">约 ¥{plan.monthlyPrice}/月</p>
+                    <p className="text-sm text-amber-400">
+                      {region === 'CN' ? '约 ' : '≈ '}{currencySymbol}{plan.monthlyPrice.toFixed(1)}/{region === 'CN' ? '月' : 'mo'}
+                    </p>
                   )}
                   {plan.savings && (
                     <Badge className="bg-emerald-500/10 text-emerald-400 border-emerald-500/20 w-fit mt-2">
@@ -293,10 +416,14 @@ export default function Subscription() {
               onCheckedChange={setAutoRenew}
               className="data-[state=checked]:bg-amber-500"
             />
-            <span className="text-sm text-slate-300">自动续费</span>
+            <span className="text-sm text-slate-300">
+              {region === 'CN' ? '自动续费' : 'Auto-renew'}
+            </span>
           </div>
           <p className="text-xs text-slate-500">
-            开启后到期自动续费，可随时在个人中心取消
+            {region === 'CN' 
+              ? '开启后到期自动续费，可随时在个人中心取消'
+              : 'Auto-renew on expiry, cancel anytime in profile'}
           </p>
         </div>
 
@@ -319,27 +446,45 @@ export default function Subscription() {
 
         {/* Payment Methods */}
         <div className="text-center mb-8">
-          <p className="text-sm text-slate-500 mb-4">支持的支付方式</p>
-          <div className="flex items-center justify-center gap-6">
+          <p className="text-sm text-slate-500 mb-4">
+            {region === 'CN' ? '支持的支付方式' : 'Supported Payment Methods'}
+          </p>
+          <div className="flex items-center justify-center gap-6 flex-wrap">
             <div className="flex items-center gap-2 text-slate-400">
               <CreditCard className="w-5 h-5" />
-              <span className="text-sm">信用卡</span>
+              <span className="text-sm">{region === 'CN' ? '信用卡' : 'Credit Card'}</span>
             </div>
-            <div className="flex items-center gap-2 text-slate-400">
-              <div className="w-5 h-5 bg-green-500 rounded text-xs flex items-center justify-center text-white font-bold">微</div>
-              <span className="text-sm">微信支付</span>
-            </div>
-            <div className="flex items-center gap-2 text-slate-400">
-              <div className="w-5 h-5 bg-blue-500 rounded text-xs flex items-center justify-center text-white font-bold">支</div>
-              <span className="text-sm">支付宝</span>
-            </div>
+            {region === 'CN' && (
+              <>
+                <div className="flex items-center gap-2 text-slate-400">
+                  <div className="w-5 h-5 bg-green-500 rounded text-xs flex items-center justify-center text-white font-bold">微</div>
+                  <span className="text-sm">微信支付</span>
+                </div>
+                <div className="flex items-center gap-2 text-slate-400">
+                  <div className="w-5 h-5 bg-blue-500 rounded text-xs flex items-center justify-center text-white font-bold">支</div>
+                  <span className="text-sm">支付宝</span>
+                </div>
+              </>
+            )}
+            {region !== 'CN' && (
+              <>
+                <div className="flex items-center gap-2 text-slate-400">
+                  <span className="text-sm">💳 PayPal</span>
+                </div>
+                <div className="flex items-center gap-2 text-slate-400">
+                  <span className="text-sm">🍎 Apple Pay</span>
+                </div>
+              </>
+            )}
           </div>
         </div>
 
         {/* Terms */}
         <div className="text-center text-xs text-slate-500 max-w-2xl mx-auto">
           <AlertCircle className="w-4 h-4 inline mr-1" />
-          订阅即表示您同意我们的服务条款和隐私政策。自动续费将在到期前24小时内自动扣款，您可以随时在个人中心取消自动续费。
+          {region === 'CN' 
+            ? '订阅即表示您同意我们的服务条款和隐私政策。自动续费将在到期前24小时内自动扣款，您可以随时在个人中心取消自动续费。'
+            : 'By subscribing, you agree to our Terms of Service and Privacy Policy. Auto-renewal charges 24 hours before expiration. Cancel anytime in your profile.'}
         </div>
       </div>
     </div>
