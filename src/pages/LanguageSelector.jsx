@@ -8,46 +8,41 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
 const languages = [
-  { 
-    code: 'zh-CN', 
-    name: '简体中文', 
-    nativeName: '简体中文',
-    flag: '🇨🇳',
-    region: 'CN',
-    currency: 'CNY'
-  },
-  { 
-    code: 'en-US', 
-    name: 'English', 
-    nativeName: 'English',
-    flag: '🇺🇸',
-    region: 'US',
-    currency: 'USD'
-  },
-  { 
-    code: 'zh-TW', 
-    name: '繁體中文', 
-    nativeName: '繁體中文',
-    flag: '🇹🇼',
-    region: 'TW',
-    currency: 'TWD'
-  },
-  { 
-    code: 'ja-JP', 
-    name: 'Japanese', 
-    nativeName: '日本語',
-    flag: '🇯🇵',
-    region: 'JP',
-    currency: 'JPY'
-  },
-  { 
-    code: 'ko-KR', 
-    name: 'Korean', 
-    nativeName: '한국어',
-    flag: '🇰🇷',
-    region: 'KR',
-    currency: 'KRW'
-  },
+  { code: 'zh-CN', name: 'Simplified Chinese', nativeName: '简体中文', flag: '🇨🇳', region: 'CN', currency: 'CNY' },
+  { code: 'en-US', name: 'English (US)', nativeName: 'English (US)', flag: '🇺🇸', region: 'US', currency: 'USD' },
+  { code: 'zh-TW', name: 'Traditional Chinese', nativeName: '繁體中文', flag: '🇹🇼', region: 'TW', currency: 'TWD' },
+  { code: 'ja-JP', name: 'Japanese', nativeName: '日本語', flag: '🇯🇵', region: 'JP', currency: 'JPY' },
+  { code: 'ko-KR', name: 'Korean', nativeName: '한국어', flag: '🇰🇷', region: 'KR', currency: 'KRW' },
+  { code: 'es-ES', name: 'Spanish', nativeName: 'Español', flag: '🇪🇸', region: 'ES', currency: 'EUR' },
+  { code: 'fr-FR', name: 'French', nativeName: 'Français', flag: '🇫🇷', region: 'FR', currency: 'EUR' },
+  { code: 'de-DE', name: 'German', nativeName: 'Deutsch', flag: '🇩🇪', region: 'DE', currency: 'EUR' },
+  { code: 'it-IT', name: 'Italian', nativeName: 'Italiano', flag: '🇮🇹', region: 'IT', currency: 'EUR' },
+  { code: 'pt-PT', name: 'Portuguese', nativeName: 'Português', flag: '🇵🇹', region: 'PT', currency: 'EUR' },
+  { code: 'ru-RU', name: 'Russian', nativeName: 'Русский', flag: '🇷🇺', region: 'RU', currency: 'RUB' },
+  { code: 'ar-SA', name: 'Arabic', nativeName: 'العربية', flag: '🇸🇦', region: 'SA', currency: 'SAR' },
+  { code: 'hi-IN', name: 'Hindi', nativeName: 'हिन्दी', flag: '🇮🇳', region: 'IN', currency: 'INR' },
+  { code: 'th-TH', name: 'Thai', nativeName: 'ไทย', flag: '🇹🇭', region: 'TH', currency: 'THB' },
+  { code: 'vi-VN', name: 'Vietnamese', nativeName: 'Tiếng Việt', flag: '🇻🇳', region: 'VN', currency: 'VND' },
+  { code: 'id-ID', name: 'Indonesian', nativeName: 'Bahasa Indonesia', flag: '🇮🇩', region: 'ID', currency: 'IDR' },
+  { code: 'ms-MY', name: 'Malay', nativeName: 'Bahasa Melayu', flag: '🇲🇾', region: 'MY', currency: 'MYR' },
+  { code: 'tr-TR', name: 'Turkish', nativeName: 'Türkçe', flag: '🇹🇷', region: 'TR', currency: 'TRY' },
+  { code: 'pl-PL', name: 'Polish', nativeName: 'Polski', flag: '🇵🇱', region: 'PL', currency: 'PLN' },
+  { code: 'nl-NL', name: 'Dutch', nativeName: 'Nederlands', flag: '🇳🇱', region: 'NL', currency: 'EUR' },
+  { code: 'sv-SE', name: 'Swedish', nativeName: 'Svenska', flag: '🇸🇪', region: 'SE', currency: 'SEK' },
+  { code: 'no-NO', name: 'Norwegian', nativeName: 'Norsk', flag: '🇳🇴', region: 'NO', currency: 'NOK' },
+  { code: 'da-DK', name: 'Danish', nativeName: 'Dansk', flag: '🇩🇰', region: 'DK', currency: 'DKK' },
+  { code: 'fi-FI', name: 'Finnish', nativeName: 'Suomi', flag: '🇫🇮', region: 'FI', currency: 'EUR' },
+  { code: 'el-GR', name: 'Greek', nativeName: 'Ελληνικά', flag: '🇬🇷', region: 'GR', currency: 'EUR' },
+  { code: 'he-IL', name: 'Hebrew', nativeName: 'עברית', flag: '🇮🇱', region: 'IL', currency: 'ILS' },
+  { code: 'cs-CZ', name: 'Czech', nativeName: 'Čeština', flag: '🇨🇿', region: 'CZ', currency: 'CZK' },
+  { code: 'ro-RO', name: 'Romanian', nativeName: 'Română', flag: '🇷🇴', region: 'RO', currency: 'RON' },
+  { code: 'hu-HU', name: 'Hungarian', nativeName: 'Magyar', flag: '🇭🇺', region: 'HU', currency: 'HUF' },
+  { code: 'uk-UA', name: 'Ukrainian', nativeName: 'Українська', flag: '🇺🇦', region: 'UA', currency: 'UAH' },
+  { code: 'pt-BR', name: 'Portuguese (BR)', nativeName: 'Português (Brasil)', flag: '🇧🇷', region: 'BR', currency: 'BRL' },
+  { code: 'es-MX', name: 'Spanish (MX)', nativeName: 'Español (México)', flag: '🇲🇽', region: 'MX', currency: 'MXN' },
+  { code: 'en-GB', name: 'English (UK)', nativeName: 'English (UK)', flag: '🇬🇧', region: 'GB', currency: 'GBP' },
+  { code: 'fr-CA', name: 'French (CA)', nativeName: 'Français (Canada)', flag: '🇨🇦', region: 'CA', currency: 'CAD' },
+  { code: 'zh-HK', name: 'Chinese (HK)', nativeName: '中文（香港）', flag: '🇭🇰', region: 'HK', currency: 'HKD' },
 ];
 
 export default function LanguageSelector() {
@@ -103,7 +98,7 @@ export default function LanguageSelector() {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-4 mb-8">
+        <div className="grid md:grid-cols-3 gap-3 mb-8 max-h-[60vh] overflow-y-auto scrollbar-hide">
           {languages.map((lang) => (
             <motion.div
               key={lang.code}
@@ -118,19 +113,19 @@ export default function LanguageSelector() {
                     : 'bg-slate-800/40 border-slate-700/50 hover:border-slate-600'
                 }`}
               >
-                <CardContent className="p-6 flex items-center justify-between">
-                  <div className="flex items-center gap-4">
-                    <span className="text-4xl">{lang.flag}</span>
+                <CardContent className="p-4 flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <span className="text-3xl">{lang.flag}</span>
                     <div>
-                      <h3 className="text-lg font-medium text-white">
+                      <h3 className="text-sm font-medium text-white">
                         {lang.nativeName}
                       </h3>
-                      <p className="text-sm text-slate-400">{lang.name}</p>
+                      <p className="text-xs text-slate-400">{lang.name}</p>
                     </div>
                   </div>
                   {selectedLang?.code === lang.code && (
-                    <div className="w-8 h-8 rounded-full bg-amber-500 flex items-center justify-center">
-                      <Check className="w-5 h-5 text-black" />
+                    <div className="w-6 h-6 rounded-full bg-amber-500 flex items-center justify-center shrink-0">
+                      <Check className="w-4 h-4 text-black" />
                     </div>
                   )}
                 </CardContent>
