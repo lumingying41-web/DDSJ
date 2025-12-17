@@ -333,6 +333,69 @@ export default function Profile() {
             </AlertDialogContent>
           </AlertDialog>
         </motion.div>
+
+        {/* Delete Account */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6 }}
+          className="mt-4"
+        >
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button variant="ghost" className="w-full text-slate-500 hover:text-red-400 hover:bg-red-500/10 text-sm">
+                注销账号
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent className="bg-slate-800 border-slate-700">
+              <AlertDialogHeader>
+                <AlertDialogTitle className="text-white">注销账号</AlertDialogTitle>
+                <AlertDialogDescription className="text-slate-400">
+                  <div className="space-y-2">
+                    <p>注销账号后，您的所有数据将被永久删除，包括：</p>
+                    <ul className="list-disc list-inside space-y-1 text-sm">
+                      <li>订阅记录</li>
+                      <li>收藏内容</li>
+                      <li>个人偏好设置</li>
+                      <li>使用记录</li>
+                    </ul>
+                    <p className="text-red-400 font-medium mt-3">此操作不可恢复，请谨慎操作。</p>
+                  </div>
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel className="bg-slate-700 text-white border-slate-600 hover:bg-slate-600">
+                  取消
+                </AlertDialogCancel>
+                <AlertDialogAction 
+                  onClick={async () => {
+                    try {
+                      // Delete all user-related data
+                      if (subscription) {
+                        await base44.entities.Subscription.delete(subscription.id);
+                      }
+                      if (preferences) {
+                        await base44.entities.UserPreference.delete(preferences.id);
+                      }
+                      // Delete all bookmarks
+                      const userBookmarks = await base44.entities.Bookmark.filter({ user_email: user.email });
+                      for (const bookmark of userBookmarks) {
+                        await base44.entities.Bookmark.delete(bookmark.id);
+                      }
+                      // Logout
+                      base44.auth.logout();
+                    } catch (e) {
+                      alert('注销失败，请重试或联系客服');
+                    }
+                  }}
+                  className="bg-red-500 hover:bg-red-600"
+                >
+                  确认注销
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </motion.div>
       </div>
     </div>
   );
