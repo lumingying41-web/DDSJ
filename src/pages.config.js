@@ -9,6 +9,7 @@ import Profile from './pages/Profile';
 import Preferences from './pages/Preferences';
 import Search from './pages/Search';
 import LanguageSelector from './pages/LanguageSelector';
+import PaymentMethod from './pages/PaymentMethod';
 import __Layout from './Layout.jsx';
 
 
@@ -24,6 +25,7 @@ export const PAGES = {
     "Preferences": Preferences,
     "Search": Search,
     "LanguageSelector": LanguageSelector,
+    "PaymentMethod": PaymentMethod,
 }
 
 export const pagesConfig = {

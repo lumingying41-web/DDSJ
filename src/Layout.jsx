@@ -87,7 +87,7 @@ export default function Layout({ children, currentPageName }) {
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-500 to-amber-600 flex items-center justify-center">
               <Zap className="w-4 h-4 text-black" />
             </div>
-            <span className="text-lg font-bold text-white">MarketPulse</span>
+            <span className="text-lg font-bold text-white">顶点视角</span>
             {isPremiumUser && (
               <Badge className="bg-amber-500/10 text-amber-400 border-amber-500/20 text-xs">
                 <Crown className="w-3 h-3 mr-1" />
@@ -147,7 +147,7 @@ export default function Layout({ children, currentPageName }) {
             <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-amber-500 to-amber-600 flex items-center justify-center">
               <Zap className="w-3.5 h-3.5 text-black" />
             </div>
-            <span className="text-base font-bold text-white">MarketPulse</span>
+            <span className="text-base font-bold text-white">顶点视角</span>
           </Link>
           
           {isPremiumUser && (
