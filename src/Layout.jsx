@@ -84,9 +84,11 @@ export default function Layout({ children, currentPageName }) {
       <header className="hidden md:block fixed top-0 left-0 right-0 z-50 bg-[#070D18]/95 backdrop-blur-lg border-b border-slate-800/50">
         <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
           <Link to={createPageUrl('Home')} className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-500 to-amber-600 flex items-center justify-center">
-              <Zap className="w-4 h-4 text-black" />
-            </div>
+            <img 
+              src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69428f76e79351c1b4084783/8a0bbd26d_427b62b42136215ca475cbd1d74c2345.jpg" 
+              alt="顶点视角" 
+              className="w-8 h-8 rounded-lg object-cover"
+            />
             <span className="text-lg font-bold text-white">顶点视角</span>
             {isPremiumUser && (
               <Badge className="bg-amber-500/10 text-amber-400 border-amber-500/20 text-xs">
@@ -144,9 +146,11 @@ export default function Layout({ children, currentPageName }) {
       <header className="md:hidden fixed top-0 left-0 right-0 z-50 bg-[#070D18]/95 backdrop-blur-lg border-b border-slate-800/50">
         <div className="px-4 py-3 flex items-center justify-between">
           <Link to={createPageUrl('Home')} className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-amber-500 to-amber-600 flex items-center justify-center">
-              <Zap className="w-3.5 h-3.5 text-black" />
-            </div>
+            <img 
+              src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69428f76e79351c1b4084783/8a0bbd26d_427b62b42136215ca475cbd1d74c2345.jpg" 
+              alt="顶点视角" 
+              className="w-7 h-7 rounded-lg object-cover"
+            />
             <span className="text-base font-bold text-white">顶点视角</span>
           </Link>
           

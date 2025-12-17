@@ -289,13 +289,15 @@ export default function Profile() {
                 </div>
               </Link>
               
-              <div className="flex items-center justify-between py-2">
-                <div className="flex items-center gap-3">
-                  <Shield className="w-4 h-4 text-slate-400" />
-                  <span className="text-sm text-slate-300">隐私政策</span>
+              <Link to={createPageUrl('PrivacyPolicy')}>
+                <div className="flex items-center justify-between py-2 hover:bg-slate-700/30 rounded-lg px-2 -mx-2 transition-colors">
+                  <div className="flex items-center gap-3">
+                    <Shield className="w-4 h-4 text-slate-400" />
+                    <span className="text-sm text-slate-300">隐私政策</span>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-slate-500" />
                 </div>
-                <ChevronRight className="w-4 h-4 text-slate-500" />
-              </div>
+              </Link>
             </CardContent>
           </Card>
         </motion.div>
