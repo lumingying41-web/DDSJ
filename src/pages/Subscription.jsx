@@ -193,38 +193,10 @@ export default function Subscription() {
       return;
     }
     
-    setIsProcessing(true);
-    
-    // Create or update subscription
     const planData = plans.find(p => p.id === planId);
-    const endDate = new Date();
-    if (planId === 'monthly') endDate.setMonth(endDate.getMonth() + 1);
-    else if (planId === 'yearly') endDate.setFullYear(endDate.getFullYear() + 1);
-    else if (planId === 'lifetime') endDate.setFullYear(endDate.getFullYear() + 100);
     
-    if (subscription) {
-      await base44.entities.Subscription.update(subscription.id, {
-        plan: planId,
-        status: 'active',
-        start_date: new Date().toISOString().split('T')[0],
-        end_date: endDate.toISOString().split('T')[0],
-        auto_renew: autoRenew,
-        payment_method: `${currency} - ${region}`
-      });
-    } else {
-      await base44.entities.Subscription.create({
-        user_email: user.email,
-        plan: planId,
-        status: 'active',
-        start_date: new Date().toISOString().split('T')[0],
-        end_date: endDate.toISOString().split('T')[0],
-        auto_renew: autoRenew,
-        payment_method: `${currency} - ${region}`
-      });
-    }
-    
-    setIsProcessing(false);
-    window.location.reload();
+    // 跳转到支付方式选择页面，传递计划和金额信息
+    window.location.href = createPageUrl(`PaymentMethod?plan=${planId}&amount=${planData.price}`);
   };
   
   const handleRegionChange = (newRegion) => {
@@ -472,7 +444,7 @@ export default function Subscription() {
                   <span className="text-sm">💳 PayPal</span>
                 </div>
                 <div className="flex items-center gap-2 text-slate-400">
-                  <span className="text-sm">🍎 Apple Pay</span>
+                  <span className="text-sm">📱 Google Play</span>
                 </div>
               </>
             )}
