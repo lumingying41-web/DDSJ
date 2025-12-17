@@ -15,6 +15,7 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import ReactMarkdown from 'react-markdown';
 import SubscriptionBanner from '@/components/subscription/SubscriptionBanner';
+import AccessControl from '@/components/AccessControl';
 
 const ratingConfig = {
   strong_buy: { label: '强烈买入', color: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20', icon: TrendingUp },
@@ -124,7 +125,8 @@ export default function ResearchDetail() {
   }
 
   return (
-    <div className="min-h-screen bg-[#070D18]">
+    <AccessControl contentType="research">
+      <div className="min-h-screen bg-[#070D18]">
       {/* Header */}
       <div className="sticky top-0 z-40 bg-[#070D18]/95 backdrop-blur-lg border-b border-slate-800/50">
         <div className="max-w-3xl mx-auto px-4 py-4 flex items-center justify-between">
@@ -279,5 +281,6 @@ export default function ResearchDetail() {
         )}
       </motion.div>
     </div>
+    </AccessControl>
   );
 }
