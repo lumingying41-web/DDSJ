@@ -15,6 +15,7 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import ReactMarkdown from 'react-markdown';
 import SubscriptionBanner from '@/components/subscription/SubscriptionBanner';
+import AccessControl from '@/components/AccessControl';
 
 const institutionTypeLabels = {
   investment_bank: '投行',
@@ -127,7 +128,8 @@ export default function ReportDetail() {
   }
 
   return (
-    <div className="min-h-screen bg-[#070D18]">
+    <AccessControl contentType="institution">
+      <div className="min-h-screen bg-[#070D18]">
       {/* Header */}
       <div className="sticky top-0 z-40 bg-[#070D18]/95 backdrop-blur-lg border-b border-slate-800/50">
         <div className="max-w-3xl mx-auto px-4 py-4 flex items-center justify-between">
@@ -273,5 +275,6 @@ export default function ReportDetail() {
         )}
       </motion.div>
     </div>
+    </AccessControl>
   );
 }
