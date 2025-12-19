@@ -39,16 +39,23 @@ export default function Home() {
   const { data: newsFlash = [], isLoading, refetch } = useQuery({
     queryKey: ['newsFlash', activeCategory, activeSentiment],
     queryFn: async () => {
+      // 先同步最新新闻
+      try {
+        await base44.functions.invoke('syncFinancialNews', {});
+      } catch (e) {
+        console.error('Failed to sync news:', e);
+      }
+
       let filter = {};
       if (activeCategory !== 'all') filter.category = activeCategory;
       if (activeSentiment !== 'all') filter.sentiment = activeSentiment;
-      
+
       if (Object.keys(filter).length > 0) {
         return base44.entities.NewsFlash.filter(filter, '-created_date', 50);
       }
       return base44.entities.NewsFlash.list('-created_date', 50);
-      },
-      });
+    },
+  });
 
       useEffect(() => {
       // 自动刷新快讯

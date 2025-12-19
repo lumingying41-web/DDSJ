@@ -3,42 +3,42 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.4';
 Deno.serve(async (req) => {
     try {
         const base44 = createClientFromRequest(req);
+        const apiKey = Deno.env.get("FINNHUB_API_KEY");
         
-        const symbols = ['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'NVDA', 'TSLA', 'META', 'NFLX'];
+        if (!apiKey) {
+            return Response.json({ error: 'FINNHUB_API_KEY not configured' }, { status: 500 });
+        }
         
-        // 使用 InvokeLLM 获取实时股价
-        const response = await base44.integrations.Core.InvokeLLM({
-            prompt: `获取以下美股的实时价格、涨跌额和涨跌幅：${symbols.join(', ')}。
+        const stockSymbols = [
+            { symbol: 'AAPL', name: '苹果' },
+            { symbol: 'TSLA', name: '特斯拉' },
+            { symbol: 'MSFT', name: '微软' },
+            { symbol: 'GOOGL', name: '谷歌' },
+            { symbol: 'AMZN', name: '亚马逊' },
+            { symbol: 'META', name: 'Meta' },
+            { symbol: 'NVDA', name: '英伟达' },
+            { symbol: 'AMD', name: '超威半导体' }
+        ];
+        
+        const stockPromises = stockSymbols.map(async ({ symbol, name }) => {
+            const response = await fetch(
+                `https://finnhub.io/api/v1/quote?symbol=${symbol}&token=${apiKey}`
+            );
+            const data = await response.json();
             
-要求：
-1. 返回今日最新的实时价格
-2. 包含中文名称
-3. 计算准确的涨跌额和涨跌幅
-
-请返回JSON格式数据。`,
-            add_context_from_internet: true,
-            response_json_schema: {
-                type: "object",
-                properties: {
-                    stocks: {
-                        type: "array",
-                        items: {
-                            type: "object",
-                            properties: {
-                                symbol: { type: "string" },
-                                name: { type: "string" },
-                                price: { type: "number" },
-                                change: { type: "number" },
-                                changePercent: { type: "number" }
-                            }
-                        }
-                    }
-                }
-            }
+            return {
+                symbol,
+                name,
+                price: data.c || 0,
+                change: data.d || 0,
+                changePercent: data.dp || 0
+            };
         });
         
-        return Response.json({ 
-            stocks: response.stocks,
+        const stocks = await Promise.all(stockPromises);
+        
+        return Response.json({
+            stocks,
             timestamp: new Date().toISOString()
         });
     } catch (error) {
