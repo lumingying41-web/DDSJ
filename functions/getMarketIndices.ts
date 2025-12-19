@@ -6,22 +6,16 @@ Deno.serve(async (req) => {
         const alphaVantageKey = Deno.env.get("ALPHA_VANTAGE_API_KEY");
         const iexKey = Deno.env.get("IEX_CLOUD_API_KEY");
         const twelveDataKey = Deno.env.get("TWELVE_DATA_API_KEY");
-        const finnhubKey = Deno.env.get("FINNHUB_API_KEY");
-        const polygonKey = Deno.env.get("POLYGON_API_KEY");
         
-        const stockSymbols = [
-            { symbol: 'AAPL', name: '苹果' },
-            { symbol: 'TSLA', name: '特斯拉' },
-            { symbol: 'MSFT', name: '微软' },
-            { symbol: 'GOOGL', name: '谷歌' },
-            { symbol: 'AMZN', name: '亚马逊' },
-            { symbol: 'META', name: 'Meta' },
-            { symbol: 'NVDA', name: '英伟达' },
-            { symbol: 'AMD', name: '超威半导体' }
+        const indices = [
+            { symbol: 'SPY', name: '标普500', displayName: 'S&P 500' },
+            { symbol: 'QQQ', name: '纳斯达克100', displayName: 'NASDAQ 100' },
+            { symbol: 'DIA', name: '道琼斯', displayName: 'Dow Jones' },
+            { symbol: 'IWM', name: '罗素2000', displayName: 'Russell 2000' }
         ];
         
-        const stockPromises = stockSymbols.map(async ({ symbol, name }) => {
-            // 1. Alpha Vantage (优先)
+        const indicesPromises = indices.map(async ({ symbol, name, displayName }) => {
+            // 1. Alpha Vantage
             if (alphaVantageKey) {
                 try {
                     const response = await fetch(
@@ -34,10 +28,10 @@ Deno.serve(async (req) => {
                         return {
                             symbol,
                             name,
+                            displayName,
                             price: parseFloat(quote['05. price']),
                             change: parseFloat(quote['09. change']),
-                            changePercent: parseFloat(quote['10. change percent'].replace('%', '')),
-                            source: 'Alpha Vantage'
+                            changePercent: parseFloat(quote['10. change percent'].replace('%', ''))
                         };
                     }
                 } catch (e) {
@@ -57,10 +51,10 @@ Deno.serve(async (req) => {
                         return {
                             symbol,
                             name,
+                            displayName,
                             price: data.latestPrice,
                             change: data.change || 0,
-                            changePercent: data.changePercent * 100 || 0,
-                            source: 'IEX Cloud'
+                            changePercent: data.changePercent * 100 || 0
                         };
                     }
                 } catch (e) {
@@ -83,10 +77,10 @@ Deno.serve(async (req) => {
                         return {
                             symbol,
                             name,
+                            displayName,
                             price: parseFloat(data.close),
                             change: change,
-                            changePercent: changePercent,
-                            source: 'Twelve Data'
+                            changePercent: changePercent
                         };
                     }
                 } catch (e) {
@@ -94,7 +88,7 @@ Deno.serve(async (req) => {
                 }
             }
             
-            // 4. Yahoo Finance (非官方API)
+            // 4. Yahoo Finance (备用)
             try {
                 const response = await fetch(
                     `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}`
@@ -111,79 +105,25 @@ Deno.serve(async (req) => {
                     return {
                         symbol,
                         name,
+                        displayName,
                         price: price,
                         change: change,
-                        changePercent: changePercent,
-                        source: 'Yahoo Finance'
+                        changePercent: changePercent
                     };
                 }
             } catch (e) {
                 console.error(`Yahoo Finance error for ${symbol}:`, e);
             }
             
-            // 5. Finnhub
-            if (finnhubKey) {
-                try {
-                    const response = await fetch(
-                        `https://finnhub.io/api/v1/quote?symbol=${symbol}&token=${finnhubKey}`
-                    );
-                    const data = await response.json();
-                    
-                    if (data.c) {
-                        return {
-                            symbol,
-                            name,
-                            price: data.c,
-                            change: data.d || 0,
-                            changePercent: data.dp || 0,
-                            source: 'Finnhub'
-                        };
-                    }
-                } catch (e) {
-                    console.error(`Finnhub error for ${symbol}:`, e);
-                }
-            }
-            
-            // 6. Polygon.io (最后备用)
-            if (polygonKey) {
-                try {
-                    const yesterday = new Date();
-                    yesterday.setDate(yesterday.getDate() - 1);
-                    const dateStr = yesterday.toISOString().split('T')[0];
-                    
-                    const response = await fetch(
-                        `https://api.polygon.io/v1/open-close/${symbol}/${dateStr}?adjusted=true&apiKey=${polygonKey}`
-                    );
-                    const data = await response.json();
-                    
-                    if (data.close) {
-                        const change = data.close - data.open;
-                        const changePercent = (change / data.open) * 100;
-                        
-                        return {
-                            symbol,
-                            name,
-                            price: data.close,
-                            change: change,
-                            changePercent: changePercent,
-                            source: 'Polygon.io'
-                        };
-                    }
-                } catch (e) {
-                    console.error(`Polygon error for ${symbol}:`, e);
-                }
-            }
-            
             return null;
         });
         
-        const results = await Promise.all(stockPromises);
-        const stocks = results.filter(s => s && s.price > 0);
+        const results = await Promise.all(indicesPromises);
+        const validIndices = results.filter(i => i && i.price > 0);
         
         return Response.json({
-            stocks,
-            timestamp: new Date().toISOString(),
-            sources_used: [...new Set(stocks.map(s => s.source))]
+            indices: validIndices,
+            timestamp: new Date().toISOString()
         });
     } catch (error) {
         return Response.json({ error: error.message }, { status: 500 });

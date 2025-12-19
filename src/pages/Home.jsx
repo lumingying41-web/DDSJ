@@ -9,6 +9,8 @@ import NewsCard from '@/components/news/NewsCard';
 import NewsFilter from '@/components/news/NewsFilter';
 import SubscriptionBanner from '@/components/subscription/SubscriptionBanner';
 import StockTicker from '@/components/common/StockTicker';
+import MarketIndices from '@/components/common/MarketIndices';
+import EconomicIndicators from '@/components/common/EconomicIndicators';
 
 export default function Home() {
   const [activeCategory, setActiveCategory] = useState('all');
@@ -71,6 +73,9 @@ export default function Home() {
     <div className="min-h-screen bg-[#070D18]">
       {/* Stock Ticker */}
       <StockTicker />
+
+      {/* Market Indices */}
+      <MarketIndices />
       
       {/* Header */}
       <div className="sticky top-0 z-40 bg-[#070D18]/95 backdrop-blur-lg border-b border-slate-800/50">
@@ -118,7 +123,10 @@ export default function Home() {
       
       {/* Content */}
       <div className="max-w-4xl mx-auto px-4 py-6">
-
+        {/* Economic Indicators */}
+        <div className="mb-6">
+          <EconomicIndicators />
+        </div>
         
         {/* News List */}
         <div className="space-y-4">
