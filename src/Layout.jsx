@@ -24,6 +24,19 @@ export default function Layout({ children, currentPageName }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   
   useEffect(() => {
+    // Prevent ethereum property redefinition error
+    const handleError = (event) => {
+      if (event.message && event.message.includes('ethereum')) {
+        event.preventDefault();
+        return true;
+      }
+    };
+    window.addEventListener('error', handleError);
+    
+    return () => window.removeEventListener('error', handleError);
+  }, []);
+  
+  useEffect(() => {
     const loadUser = async () => {
       try {
         const currentUser = await base44.auth.me();
