@@ -16,6 +16,16 @@ export default function Home() {
   const [user, setUser] = useState(null);
   const [subscription, setSubscription] = useState(null);
   const [isLive, setIsLive] = useState(true);
+
+  useEffect(() => {
+    // 自动刷新快讯
+    if (isLive) {
+      const interval = setInterval(() => {
+        refetch();
+      }, 30000); // 每30秒自动刷新
+      return () => clearInterval(interval);
+    }
+  }, [isLive, refetch]);
   
   useEffect(() => {
     const loadUser = async () => {
