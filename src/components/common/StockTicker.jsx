@@ -39,7 +39,7 @@ export default function StockTicker() {
     <div className="bg-[#070D18] border-b border-slate-800/50 py-2 overflow-hidden">
       <motion.div 
         className="flex gap-8"
-        animate={{ x: [0, -50 * mockStocks.length] }}
+        animate={{ x: [0, -50 * stocks.length] }}
         transition={{ 
           duration: 30, 
           repeat: Infinity, 
