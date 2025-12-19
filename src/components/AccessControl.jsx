@@ -56,16 +56,16 @@ export default function AccessControl({ contentType, children, onAccessGranted }
         return;
       }
 
-      // 检查试用期
+      // 检查试用期（7天）
       const trialEndDate = currentUser.trial_end_date 
         ? new Date(currentUser.trial_end_date)
-        : new Date(new Date(currentUser.created_date).getTime() + 15 * 24 * 60 * 60 * 1000);
+        : new Date(new Date(currentUser.created_date).getTime() + 7 * 24 * 60 * 60 * 1000);
 
       const now = new Date();
       const inTrialPeriod = isAfter(trialEndDate, now);
       const daysRemaining = Math.max(0, differenceInDays(trialEndDate, now));
 
-      // 如果在试用期内，允许访问
+      // 如果在试用期内，允许无限访问
       if (inTrialPeriod) {
         setAccessStatus({
           canAccess: true,
@@ -94,9 +94,9 @@ export default function AccessControl({ contentType, children, onAccessGranted }
         currentCount = lastReadDate === today ? (currentUser.daily_institution_read_count || 0) : 0;
       }
 
-      const remainingReads = Math.max(0, 2 - currentCount);
+      const remainingReads = Math.max(0, 10 - currentCount);
 
-      if (currentCount < 2) {
+      if (currentCount < 10) {
         setAccessStatus({
           canAccess: true,
           isLoading: false,
