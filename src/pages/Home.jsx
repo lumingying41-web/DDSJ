@@ -101,12 +101,7 @@ export default function Home() {
       
       {/* Content */}
       <div className="max-w-4xl mx-auto px-4 py-6">
-        {/* Premium Banner for non-subscribers */}
-        {!isPremiumUser && (
-          <div className="mb-6">
-            <SubscriptionBanner variant="compact" />
-          </div>
-        )}
+
         
         {/* News List */}
         <div className="space-y-4">

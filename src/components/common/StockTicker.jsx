@@ -3,14 +3,14 @@ import { motion } from 'framer-motion';
 import { TrendingUp, TrendingDown } from 'lucide-react';
 
 const mockStocks = [
-  { symbol: 'AAPL', name: 'Apple', price: 178.72, change: 1.24, changePercent: 0.70 },
-  { symbol: 'MSFT', name: 'Microsoft', price: 378.91, change: -2.15, changePercent: -0.56 },
-  { symbol: 'GOOGL', name: 'Alphabet', price: 141.80, change: 0.89, changePercent: 0.63 },
-  { symbol: 'AMZN', name: 'Amazon', price: 178.25, change: 3.45, changePercent: 1.97 },
-  { symbol: 'NVDA', name: 'NVIDIA', price: 875.28, change: 12.50, changePercent: 1.45 },
-  { symbol: 'TSLA', name: 'Tesla', price: 248.50, change: -5.20, changePercent: -2.05 },
-  { symbol: 'META', name: 'Meta', price: 505.95, change: 4.30, changePercent: 0.86 },
-  { symbol: 'BRK.B', name: 'Berkshire', price: 408.50, change: 0.75, changePercent: 0.18 },
+  { symbol: 'AAPL', name: '苹果', price: 245.12, change: 2.85, changePercent: 1.18 },
+  { symbol: 'MSFT', name: '微软', price: 445.67, change: -3.21, changePercent: -0.71 },
+  { symbol: 'GOOGL', name: '谷歌', price: 185.90, change: 1.45, changePercent: 0.79 },
+  { symbol: 'AMZN', name: '亚马逊', price: 215.33, change: 4.67, changePercent: 2.22 },
+  { symbol: 'NVDA', name: '英伟达', price: 1050.25, change: 18.90, changePercent: 1.83 },
+  { symbol: 'TSLA', name: '特斯拉', price: 385.60, change: -7.40, changePercent: -1.88 },
+  { symbol: 'META', name: 'Meta', price: 625.80, change: 6.55, changePercent: 1.06 },
+  { symbol: 'NFLX', name: '奈飞', price: 715.30, change: 9.20, changePercent: 1.30 },
 ];
 
 export default function StockTicker() {
