@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
+import { base44 } from '@/api/base44Client';
 import { motion } from 'framer-motion';
 import { ArrowLeft, CreditCard, Smartphone, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -37,15 +38,39 @@ export default function PaymentMethod() {
   const handlePayment = async (method) => {
     setSelectedMethod(method.id);
     
-    // 模拟支付流程
-    // 在实际应用中，这里应该调用后端 API 初始化支付
-    alert(`正在跳转到 ${method.name} 支付页面...\n\n订阅计划: ${plan}\n金额: ¥${amount}`);
-    
-    // 实际支付流程：
-    // 1. PayPal: 调用后端创建 PayPal 订单，获取支付链接并跳转
-    // 2. Google Play: 调用 Google Play Billing API 启动购买流程
-    
-    // 支付成功后应该跳转回订阅页面并更新订阅状态
+    try {
+      if (method.id === 'paypal') {
+        // TODO: Initialize PayPal SDK and get orderId
+        const mockOrderId = 'PAYPAL_ORDER_' + Date.now();
+        
+        const response = await base44.functions.invoke('verifyPayPalPayment', {
+          orderId: mockOrderId,
+          plan: plan
+        });
+        
+        if (response.data.success) {
+          alert('订阅成功！');
+          navigate(createPageUrl('Profile'));
+        }
+      } else if (method.id === 'google_play') {
+        // TODO: Call Android WebView interface to initiate purchase
+        const mockPurchaseToken = 'GOOGLE_TOKEN_' + Date.now();
+        
+        const response = await base44.functions.invoke('verifyGooglePlayPurchase', {
+          purchaseToken: mockPurchaseToken,
+          productId: `premium_${plan}`,
+          plan: plan
+        });
+        
+        if (response.data.success) {
+          alert('订阅成功！');
+          navigate(createPageUrl('Profile'));
+        }
+      }
+    } catch (error) {
+      alert('支付失败: ' + error.message);
+      setSelectedMethod(null);
+    }
   };
 
   return (
