@@ -16,16 +16,6 @@ export default function Home() {
   const [user, setUser] = useState(null);
   const [subscription, setSubscription] = useState(null);
   const [isLive, setIsLive] = useState(true);
-
-  useEffect(() => {
-    // 自动刷新快讯
-    if (isLive) {
-      const interval = setInterval(() => {
-        refetch();
-      }, 30000); // 每30秒自动刷新
-      return () => clearInterval(interval);
-    }
-  }, [isLive, refetch]);
   
   useEffect(() => {
     const loadUser = async () => {
@@ -57,8 +47,18 @@ export default function Home() {
         return base44.entities.NewsFlash.filter(filter, '-created_date', 50);
       }
       return base44.entities.NewsFlash.list('-created_date', 50);
-    },
-  });
+      },
+      });
+
+      useEffect(() => {
+      // 自动刷新快讯
+      if (isLive) {
+      const interval = setInterval(() => {
+        refetch();
+      }, 30000); // 每30秒自动刷新
+      return () => clearInterval(interval);
+      }
+      }, [isLive, refetch]);
 
   return (
     <div className="min-h-screen bg-[#070D18]">
