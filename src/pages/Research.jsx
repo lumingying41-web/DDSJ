@@ -60,6 +60,13 @@ export default function Research() {
   const { data: research = [], isLoading } = useQuery({
     queryKey: ['research', activeCategory, activeRating],
     queryFn: async () => {
+      // 先同步SEC数据
+      try {
+        await base44.functions.invoke('syncSECFilings', {});
+      } catch (e) {
+        console.error('Failed to sync SEC data:', e);
+      }
+      
       // 获取今天的研报
       const today = new Date();
       today.setHours(0, 0, 0, 0);
