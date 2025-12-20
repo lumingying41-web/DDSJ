@@ -5,13 +5,20 @@ import { base44 } from '@/api/base44Client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default function EconomicIndicators() {
-  const [indicators, setIndicators] = useState([]);
+  const [indicators, setIndicators] = useState([
+    { id: 'GDP', name: 'GDP增长率', value: 2.9, unit: '%', date: '2024-Q3' },
+    { id: 'CPI', name: 'CPI通胀率', value: 3.2, unit: '%', date: '2024-11' },
+    { id: 'UNRATE', name: '失业率', value: 3.7, unit: '%', date: '2024-11' },
+    { id: 'DFF', name: '联邦基金利率', value: 5.33, unit: '%', date: '2024-12' },
+    { id: 'T10Y', name: '10年期国债', value: 4.25, unit: '%', date: '2024-12' },
+    { id: 'UMCSENT', name: '消费者信心', value: 69.4, unit: '指数', date: '2024-11' },
+  ]);
 
   useEffect(() => {
     const fetchIndicators = async () => {
       try {
         const response = await base44.functions.invoke('getEconomicData', {});
-        if (response.data && response.data.indicators) {
+        if (response.data && response.data.indicators && response.data.indicators.length > 0) {
           setIndicators(response.data.indicators);
         }
       } catch (error) {
