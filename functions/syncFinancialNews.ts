@@ -23,11 +23,14 @@ Deno.serve(async (req) => {
     try {
         const base44 = createClientFromRequest(req);
         
-        // 先调用免费的Alpha Vantage
+        // 先调用免费的Alpha Vantage和纳斯达克
         try {
-            await base44.functions.invoke('syncAlphaVantageNews', {});
+            await Promise.all([
+                base44.functions.invoke('syncAlphaVantageNews', {}),
+                base44.functions.invoke('syncNasdaqData', {})
+            ]);
         } catch (e) {
-            console.error('Alpha Vantage sync failed:', e);
+            console.error('News sync failed:', e);
         }
         
         const finnhubKey = Deno.env.get("FINNHUB_API_KEY");

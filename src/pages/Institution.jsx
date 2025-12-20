@@ -44,6 +44,13 @@ export default function Institution() {
   const { data: reports = [], isLoading } = useQuery({
     queryKey: ['institutionReports', activeType],
     queryFn: async () => {
+      // 先同步纳斯达克数据
+      try {
+        await base44.functions.invoke('syncNasdaqData', {});
+      } catch (e) {
+        console.error('Failed to sync NASDAQ data:', e);
+      }
+      
       // 获取今天的报告
       const today = new Date();
       today.setHours(0, 0, 0, 0);
