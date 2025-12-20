@@ -44,10 +44,26 @@ export default function Institution() {
   const { data: reports = [], isLoading } = useQuery({
     queryKey: ['institutionReports', activeType],
     queryFn: async () => {
+      // 获取今天的报告
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      
+      let allReports = await base44.entities.InstitutionReport.list('-created_date', 100);
+      
+      // 只保留今天的报告
+      allReports = allReports.filter(item => {
+        const itemDate = new Date(item.published_at || item.created_date);
+        return itemDate >= today;
+      });
+      
+      if (allReports.length === 0) return [];
+      
+      // 应用过滤
       if (activeType !== 'all') {
-        return base44.entities.InstitutionReport.filter({ institution_type: activeType }, '-created_date', 50);
+        allReports = allReports.filter(item => item.institution_type === activeType);
       }
-      return base44.entities.InstitutionReport.list('-created_date', 50);
+      
+      return allReports.slice(0, 50);
     },
   });
 
@@ -135,10 +151,17 @@ export default function Institution() {
               </div>
             ))}
           </div>
+        ) : reports.length === 0 ? (
+          <Alert className="bg-slate-800/40 border-slate-700">
+            <AlertCircle className="h-4 w-4 text-amber-400" />
+            <AlertDescription className="text-slate-300 ml-2">
+              暂无当日机构报告。机构报告需要接入专业数据源（如高盛、摩根士丹利API），或等待机构发布公开报告。
+            </AlertDescription>
+          </Alert>
         ) : filteredReports.length === 0 ? (
           <div className="text-center py-20">
             <Building2 className="w-12 h-12 text-slate-600 mx-auto mb-4" />
-            <h3 className="text-lg text-slate-400 mb-2">暂无机构报告</h3>
+            <h3 className="text-lg text-slate-400 mb-2">暂无匹配报告</h3>
             <p className="text-sm text-slate-500">调整筛选条件试试</p>
           </div>
         ) : (
