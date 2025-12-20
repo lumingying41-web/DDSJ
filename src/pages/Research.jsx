@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { AlertCircle } from 'lucide-react';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -58,6 +60,19 @@ export default function Research() {
   const { data: research = [], isLoading } = useQuery({
     queryKey: ['research', activeCategory, activeRating],
     queryFn: async () => {
+      // 获取今天的研报
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      
+      let allResearch = await base44.entities.Research.list('-created_date', 100);
+      
+      // 只保留今天的研报
+      allResearch = allResearch.filter(item => {
+        const itemDate = new Date(item.published_at || item.created_date);
+        return itemDate >= today;
+      });
+      
+      if (allResearch.length === 0) return [];
       let filter = {};
       if (activeCategory !== 'all') filter.category = activeCategory;
       if (activeRating !== 'all') filter.rating = activeRating;

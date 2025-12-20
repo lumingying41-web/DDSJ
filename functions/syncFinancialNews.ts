@@ -22,6 +22,14 @@ function isDuplicate(newsItem, existingNews) {
 Deno.serve(async (req) => {
     try {
         const base44 = createClientFromRequest(req);
+        
+        // 先调用免费的Alpha Vantage
+        try {
+            await base44.functions.invoke('syncAlphaVantageNews', {});
+        } catch (e) {
+            console.error('Alpha Vantage sync failed:', e);
+        }
+        
         const finnhubKey = Deno.env.get("FINNHUB_API_KEY");
         const newsApiKey = Deno.env.get("NEWSAPI_KEY");
         const marketauxKey = Deno.env.get("MARKETAUX_API_KEY");

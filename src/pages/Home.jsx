@@ -48,14 +48,27 @@ export default function Home() {
         console.error('Failed to sync news:', e);
       }
 
-      let filter = {};
-      if (activeCategory !== 'all') filter.category = activeCategory;
-      if (activeSentiment !== 'all') filter.sentiment = activeSentiment;
-
-      if (Object.keys(filter).length > 0) {
-        return base44.entities.NewsFlash.filter(filter, '-created_date', 50);
+      // 获取今天的开始时间
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      
+      let allNews = await base44.entities.NewsFlash.list('-created_date', 200);
+      
+      // 只保留今天的新闻
+      allNews = allNews.filter(news => {
+        const newsDate = new Date(news.published_at || news.created_date);
+        return newsDate >= today;
+      });
+      
+      // 应用分类和情绪过滤
+      if (activeCategory !== 'all') {
+        allNews = allNews.filter(news => news.category === activeCategory);
       }
-      return base44.entities.NewsFlash.list('-created_date', 50);
+      if (activeSentiment !== 'all') {
+        allNews = allNews.filter(news => news.sentiment === activeSentiment);
+      }
+
+      return allNews.slice(0, 50);
     },
   });
 
