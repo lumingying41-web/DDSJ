@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
 import { 
-  Zap, FileText, Building2, Search, User, Crown,
+  Zap, FileText, Building2, Search, User, Crown, Shield,
   Menu, X
 } from 'lucide-react';
 import { Button } from "@/components/ui/button";
@@ -133,6 +133,23 @@ export default function Layout({ children, currentPageName }) {
                 </Link>
               );
             })}
+            {user?.role === 'admin' && (
+              <Link to={createPageUrl('Admin')}>
+                <Button 
+                  variant="ghost" 
+                  size="sm"
+                  className={`
+                    ${currentPageName === 'Admin' 
+                      ? 'text-amber-400 bg-amber-500/10' 
+                      : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                    }
+                  `}
+                >
+                  <Shield className="w-4 h-4 mr-2" />
+                  管理
+                </Button>
+              </Link>
+            )}
           </nav>
           
           <div className="flex items-center gap-3">
