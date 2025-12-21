@@ -11,6 +11,7 @@ import Search from './pages/Search';
 import LanguageSelector from './pages/LanguageSelector';
 import PaymentMethod from './pages/PaymentMethod';
 import PrivacyPolicy from './pages/PrivacyPolicy';
+import Admin from './pages/Admin';
 import __Layout from './Layout.jsx';
 
 
@@ -28,6 +29,7 @@ export const PAGES = {
     "LanguageSelector": LanguageSelector,
     "PaymentMethod": PaymentMethod,
     "PrivacyPolicy": PrivacyPolicy,
+    "Admin": Admin,
 }
 
 export const pagesConfig = {
