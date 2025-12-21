@@ -9,7 +9,6 @@ import NewsCard from '@/components/news/NewsCard';
 import NewsFilter from '@/components/news/NewsFilter';
 import SubscriptionBanner from '@/components/subscription/SubscriptionBanner';
 import MarketIndices from '@/components/common/MarketIndices';
-import EconomicIndicators from '@/components/common/EconomicIndicators';
 
 export default function Home() {
   const [activeCategory, setActiveCategory] = useState('all');
@@ -132,11 +131,6 @@ export default function Home() {
       
       {/* Content */}
       <div className="max-w-4xl mx-auto px-4 py-6">
-        {/* Economic Indicators */}
-        <div className="mb-6">
-          <EconomicIndicators />
-        </div>
-        
         {/* News List */}
         <div className="space-y-4">
           {isLoading ? (
