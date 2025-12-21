@@ -8,7 +8,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 import NewsCard from '@/components/news/NewsCard';
 import NewsFilter from '@/components/news/NewsFilter';
 import SubscriptionBanner from '@/components/subscription/SubscriptionBanner';
-import StockTicker from '@/components/common/StockTicker';
 import MarketIndices from '@/components/common/MarketIndices';
 import EconomicIndicators from '@/components/common/EconomicIndicators';
 
@@ -84,9 +83,6 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-[#070D18]">
-      {/* Stock Ticker */}
-      <StockTicker />
-
       {/* Market Indices */}
       <MarketIndices />
       
