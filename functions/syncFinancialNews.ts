@@ -57,7 +57,7 @@ Deno.serve(async (req) => {
     const newsApiKey = Deno.env.get("NEWSAPI_KEY");
     const marketauxKey = Deno.env.get("MARKETAUX_API_KEY");
     const polygonKey = Deno.env.get("POLYGON_API_KEY");
-    const alphaVantageKey = Deno.env.get("ALPHA_VANTAGE_API_KEY");
+    const alphaVantageKey = Deno.env.get("ALPHA_VANTAGE_API_KEY") || "75THXAWE1ZDRPVDY";
     
     const allNews = [];
     const sources = [];
