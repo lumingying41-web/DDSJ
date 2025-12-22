@@ -13,7 +13,19 @@ Deno.serve(async (req) => {
         'Referer': 'https://data.eastmoney.com/'
       }
     });
-    const newsData = await newsResponse.json();
+    
+    const text = await newsResponse.text();
+    if (!text || text.trim() === '') {
+      return Response.json({ synced: 0, source: 'eastmoney', error: 'Empty response' });
+    }
+    
+    let newsData;
+    try {
+      newsData = JSON.parse(text);
+    } catch (e) {
+      console.error('Parse error:', e.message);
+      return Response.json({ synced: 0, source: 'eastmoney', error: 'Parse error' });
+    }
     
     if (!newsData.data || !newsData.data.list) {
       return Response.json({ synced: 0, source: 'eastmoney' });
