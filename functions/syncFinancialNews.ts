@@ -1,5 +1,13 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.4';
 
+// 美股股票代码列表
+const US_STOCKS = [
+  'AAPL', 'MSFT', 'GOOGL', 'AMZN', 'META', 'TSLA', 'NVDA', 'AMD',
+  'NFLX', 'DIS', 'PYPL', 'INTC', 'CSCO', 'ADBE', 'CMCSA', 'PEP',
+  'AVGO', 'COST', 'TXN', 'QCOM', 'AMGN', 'SBUX', 'INTU', 'BKNG',
+  'GILD', 'MDLZ', 'ISRG', 'REGN', 'VRTX', 'ADP', 'MU', 'ADI'
+];
+
 // 计算文本相似度（简单版本）
 function textSimilarity(text1, text2) {
     const words1 = text1.toLowerCase().split(/\s+/);
