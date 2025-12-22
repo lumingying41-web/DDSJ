@@ -40,11 +40,13 @@ function textSimilarity(text1, text2) {
   return common / Math.max(words1.length, words2.length);
 }
 
-// 去重检查
+// 去重检查 - 放宽条件
 function isDuplicate(newsItem, existingNews) {
   return existingNews.some(existing => {
-    if (existing.source_url === newsItem.source_url) return true;
-    if (textSimilarity(existing.title, newsItem.title) > 0.7) return true;
+    // 只检查URL是否完全相同
+    if (existing.source_url && newsItem.source_url && existing.source_url === newsItem.source_url) return true;
+    // 标题完全相同才算重复
+    if (existing.title === newsItem.title) return true;
     return false;
   });
 }
@@ -138,8 +140,10 @@ Deno.serve(async (req) => {
         console.error('Yahoo Finance error:', e);
         }
     
-    // 获取已有新闻
-    const existingNews = await base44.asServiceRole.entities.NewsFlash.list('-created_date', 200);
+    // 获取今天已有新闻进行去重
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const existingNews = await base44.asServiceRole.entities.NewsFlash.list('-created_date', 100);
     
     // 去重
     const uniqueNews = allNews.filter(item => !isDuplicate(item, existingNews));
