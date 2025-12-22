@@ -19,19 +19,25 @@ export default function PaymentMethod() {
 
   const paymentMethods = [
     {
+      id: 'wechat',
+      name: '微信支付',
+      description: '使用微信扫码支付',
+      icon: '💚',
+      available: true,
+    },
+    {
+      id: 'alipay',
+      name: '支付宝',
+      description: '使用支付宝扫码或跳转支付',
+      icon: '💙',
+      available: true,
+    },
+    {
       id: 'paypal',
       name: 'PayPal',
       description: '使用 PayPal 安全支付',
       icon: '💳',
       available: true,
-    },
-    {
-      id: 'google_play',
-      name: 'Google Play',
-      description: '通过 Google Play 应用内购买',
-      icon: '📱',
-      available: true,
-      badge: 'Android',
     },
   ];
 
@@ -39,26 +45,41 @@ export default function PaymentMethod() {
     setSelectedMethod(method.id);
     
     try {
-      if (method.id === 'paypal') {
-        // TODO: Initialize PayPal SDK and get orderId
+      if (method.id === 'wechat') {
+        // 创建微信支付订单
+        const response = await base44.functions.invoke('createWeChatPayOrder', {
+          plan: plan,
+          amount: parseFloat(amount)
+        });
+        
+        if (response.data.success) {
+          // 显示二维码让用户扫码支付
+          const qrUrl = response.data.qr_code_url;
+          const orderId = response.data.order_id;
+          
+          // 跳转到支付页面显示二维码
+          navigate(createPageUrl(`PaymentQRCode?order_id=${orderId}&qr_url=${encodeURIComponent(qrUrl)}&method=wechat`));
+        }
+      } else if (method.id === 'alipay') {
+        // 创建支付宝订单
+        const response = await base44.functions.invoke('createAlipayOrder', {
+          plan: plan,
+          amount: parseFloat(amount)
+        });
+        
+        if (response.data.success) {
+          const paymentUrl = response.data.payment_url;
+          const orderId = response.data.order_id;
+          
+          // 跳转到支付页面
+          navigate(createPageUrl(`PaymentQRCode?order_id=${orderId}&payment_url=${encodeURIComponent(paymentUrl)}&method=alipay`));
+        }
+      } else if (method.id === 'paypal') {
+        // PayPal支付流程
         const mockOrderId = 'PAYPAL_ORDER_' + Date.now();
         
         const response = await base44.functions.invoke('verifyPayPalPayment', {
           orderId: mockOrderId,
-          plan: plan
-        });
-        
-        if (response.data.success) {
-          alert('订阅成功！');
-          navigate(createPageUrl('Profile'));
-        }
-      } else if (method.id === 'google_play') {
-        // TODO: Call Android WebView interface to initiate purchase
-        const mockPurchaseToken = 'GOOGLE_TOKEN_' + Date.now();
-        
-        const response = await base44.functions.invoke('verifyGooglePlayPurchase', {
-          purchaseToken: mockPurchaseToken,
-          productId: `premium_${plan}`,
           plan: plan
         });
         
