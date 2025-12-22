@@ -28,8 +28,8 @@ const getPricing = (region, currency) => {
         {
           id: 'monthly',
           name: '月度会员',
-          price: 2,
-          originalPrice: 5,
+          price: 0.5,
+          originalPrice: 2,
           period: '月',
           features: [
             '完整快讯深度解读',
@@ -43,10 +43,10 @@ const getPricing = (region, currency) => {
         {
           id: 'yearly',
           name: '年度会员',
-          price: 20,
-          originalPrice: 60,
+          price: 2,
+          originalPrice: 6,
           period: '年',
-          monthlyPrice: 1.7,
+          monthlyPrice: 0.17,
           features: [
             '月度会员全部权益',
             '优先获取独家研报',
@@ -55,13 +55,13 @@ const getPricing = (region, currency) => {
             '线下活动邀请',
           ],
           popular: true,
-          savings: '省 40 元',
+          savings: '省 4 元',
         },
         {
           id: 'lifetime',
           name: '终身会员',
-          price: 88,
-          originalPrice: 288,
+          price: 20,
+          originalPrice: 60,
           period: '永久',
           features: [
             '年度会员全部权益',
@@ -71,7 +71,7 @@ const getPricing = (region, currency) => {
             '专属定制报告',
           ],
           popular: false,
-          savings: '省 200 元',
+          savings: '省 40 元',
         },
       ]
     };
