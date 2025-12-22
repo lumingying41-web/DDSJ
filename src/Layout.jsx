@@ -44,10 +44,28 @@ export default function Layout({ children, currentPageName }) {
         
         const subs = await base44.entities.Subscription.filter({ user_email: currentUser.email });
         if (subs.length > 0) setSubscription(subs[0]);
+        
+        // 加载用户主题偏好
+        const prefs = await base44.entities.UserPreference.filter({ user_email: currentUser.email });
+        if (prefs.length > 0 && prefs[0].theme) {
+          applyTheme(prefs[0].theme);
+        }
       } catch (e) {}
     };
     loadUser();
   }, []);
+
+  const applyTheme = (theme) => {
+    const root = document.documentElement;
+    const themes = {
+      dark: { bg: '#070D18', card: '#0F1A2E' },
+      blue: { bg: '#0A1628', card: '#132744' },
+      purple: { bg: '#1a0b2e', card: '#2d1b4e' },
+      green: { bg: '#0d1f17', card: '#1a3d2e' }
+    };
+    const colors = themes[theme] || themes.dark;
+    document.body.style.backgroundColor = colors.bg;
+  };
   
   const isPremiumUser = subscription?.plan !== 'free' && subscription?.status === 'active';
   

@@ -9,7 +9,7 @@ import { zhCN } from 'date-fns/locale';
 import { 
   User, Crown, Bookmark, Bell, Settings, LogOut, 
   ChevronRight, Shield, Calendar, CreditCard, TrendingUp,
-  Building2, FileText, Zap
+  Building2, FileText, Zap, Palette
 } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -84,6 +84,29 @@ export default function Profile() {
     }
     setPreferences(prev => ({ ...prev, push_enabled: enabled }));
   };
+
+  const changeTheme = async (theme) => {
+    if (!preferences) {
+      const newPref = await base44.entities.UserPreference.create({
+        user_email: user.email,
+        theme: theme,
+      });
+      setPreferences(newPref);
+    } else {
+      await base44.entities.UserPreference.update(preferences.id, {
+        theme: theme,
+      });
+      setPreferences(prev => ({ ...prev, theme: theme }));
+    }
+    window.location.reload(); // 刷新页面应用主题
+  };
+
+  const themes = [
+    { id: 'dark', name: '暗夜黑', color: 'bg-slate-900' },
+    { id: 'blue', name: '深海蓝', color: 'bg-blue-900' },
+    { id: 'purple', name: '神秘紫', color: 'bg-purple-900' },
+    { id: 'green', name: '森林绿', color: 'bg-green-900' }
+  ];
 
   if (isLoading) {
     return (
@@ -262,6 +285,34 @@ export default function Profile() {
                   onCheckedChange={togglePush}
                   className="data-[state=checked]:bg-amber-500"
                 />
+              </div>
+
+              <div className="border-t border-slate-700/50 pt-4">
+                <div className="flex items-center gap-3 mb-3">
+                  <Palette className="w-4 h-4 text-slate-400" />
+                  <span className="text-sm text-slate-300">主题皮肤</span>
+                </div>
+                <div className="grid grid-cols-4 gap-2">
+                  {themes.map((theme) => (
+                    <button
+                      key={theme.id}
+                      onClick={() => changeTheme(theme.id)}
+                      className={`
+                        relative p-3 rounded-lg border-2 transition-all
+                        ${(preferences?.theme || 'dark') === theme.id 
+                          ? 'border-amber-500 bg-amber-500/10' 
+                          : 'border-slate-700 hover:border-slate-600'
+                        }
+                      `}
+                    >
+                      <div className={`w-full h-8 ${theme.color} rounded mb-1`} />
+                      <span className="text-[10px] text-slate-400 block text-center">{theme.name}</span>
+                      {(preferences?.theme || 'dark') === theme.id && (
+                        <div className="absolute top-1 right-1 w-2 h-2 bg-amber-500 rounded-full" />
+                      )}
+                    </button>
+                  ))}
+                </div>
               </div>
               
               <Link to={createPageUrl('Preferences')}>
