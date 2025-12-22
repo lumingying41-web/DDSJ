@@ -1,35 +1,35 @@
+import Admin from './pages/Admin';
 import Home from './pages/Home';
+import Institution from './pages/Institution';
+import LanguageSelector from './pages/LanguageSelector';
 import NewsDetail from './pages/NewsDetail';
+import PaymentMethod from './pages/PaymentMethod';
+import Preferences from './pages/Preferences';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import Profile from './pages/Profile';
+import ReportDetail from './pages/ReportDetail';
 import Research from './pages/Research';
 import ResearchDetail from './pages/ResearchDetail';
-import Institution from './pages/Institution';
-import ReportDetail from './pages/ReportDetail';
-import Subscription from './pages/Subscription';
-import Profile from './pages/Profile';
-import Preferences from './pages/Preferences';
 import Search from './pages/Search';
-import LanguageSelector from './pages/LanguageSelector';
-import PaymentMethod from './pages/PaymentMethod';
-import PrivacyPolicy from './pages/PrivacyPolicy';
-import Admin from './pages/Admin';
+import Subscription from './pages/Subscription';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
+    "Admin": Admin,
     "Home": Home,
+    "Institution": Institution,
+    "LanguageSelector": LanguageSelector,
     "NewsDetail": NewsDetail,
+    "PaymentMethod": PaymentMethod,
+    "Preferences": Preferences,
+    "PrivacyPolicy": PrivacyPolicy,
+    "Profile": Profile,
+    "ReportDetail": ReportDetail,
     "Research": Research,
     "ResearchDetail": ResearchDetail,
-    "Institution": Institution,
-    "ReportDetail": ReportDetail,
-    "Subscription": Subscription,
-    "Profile": Profile,
-    "Preferences": Preferences,
     "Search": Search,
-    "LanguageSelector": LanguageSelector,
-    "PaymentMethod": PaymentMethod,
-    "PrivacyPolicy": PrivacyPolicy,
-    "Admin": Admin,
+    "Subscription": Subscription,
 }
 
 export const pagesConfig = {
