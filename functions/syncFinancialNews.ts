@@ -52,161 +52,13 @@ function isDuplicate(newsItem, existingNews) {
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
-    
-    const finnhubKey = Deno.env.get("FINNHUB_API_KEY");
-    const newsApiKey = Deno.env.get("NEWSAPI_KEY");
-    const marketauxKey = Deno.env.get("MARKETAUX_API_KEY");
-    const polygonKey = Deno.env.get("POLYGON_API_KEY");
-    const alphaVantageKey = Deno.env.get("ALPHA_VANTAGE_API_KEY") || "75THXAWE1ZDRPVDY";
+
+    const alphaVantageKey = "75THXAWE1ZDRPVDY";
     
     const allNews = [];
     const sources = [];
-    
-    // 1. Finnhub - 按股票获取新闻
-    if (finnhubKey) {
-      try {
-        const to = Math.floor(Date.now() / 1000);
-        const from = Math.floor((Date.now() - 24 * 60 * 60 * 1000) / 1000);
-        
-        for (const symbol of US_STOCKS.slice(0, 20)) {
-          try {
-            const url = `https://finnhub.io/api/v1/company-news?symbol=${symbol}&from=${new Date(from * 1000).toISOString().split('T')[0]}&to=${new Date(to * 1000).toISOString().split('T')[0]}&token=${finnhubKey}`;
-            const res = await fetch(url);
-            const data = await res.json();
-            
-            if (Array.isArray(data) && data.length > 0) {
-              data.slice(0, 2).forEach(item => {
-                allNews.push({
-                  title: item.headline,
-                  summary: item.summary || item.headline.substring(0, 200),
-                  content: item.summary || item.headline,
-                  source: item.source || 'Finnhub',
-                  source_url: item.url,
-                  published_at: new Date(item.datetime * 1000).toISOString(),
-                  category: 'other',
-                  sentiment: 'neutral',
-                  importance: 'medium',
-                  related_stocks: [symbol],
-                  is_premium: false
-                });
-              });
-            }
-            await new Promise(resolve => setTimeout(resolve, 200));
-          } catch (e) {
-            console.log(`Finnhub ${symbol}:`, e.message);
-          }
-        }
-        sources.push('Finnhub');
-      } catch (e) {
-        console.error('Finnhub error:', e);
-      }
-    }
-    
-    // 2. NewsAPI - 美股关键词搜索
-    if (newsApiKey) {
-      try {
-        const keywords = ['AAPL', 'TSLA', 'NVDA', 'MSFT', 'GOOGL', 'AMZN', 'META'].join(' OR ');
-        const url = `https://newsapi.org/v2/everything?q=${keywords}&language=en&sortBy=publishedAt&pageSize=30&apiKey=${newsApiKey}`;
-        const res = await fetch(url);
-        const data = await res.json();
-        
-        if (data.articles) {
-          data.articles.forEach(item => {
-            if (isUSStockRelated(item.title, item.description || '', item.content || '')) {
-              const relatedStocks = US_STOCKS.filter(stock => 
-                `${item.title} ${item.description}`.toUpperCase().includes(stock)
-              );
-              
-              allNews.push({
-                title: item.title,
-                summary: item.description || item.title.substring(0, 200),
-                content: item.content || item.description || item.title,
-                source: item.source?.name || 'NewsAPI',
-                source_url: item.url,
-                published_at: item.publishedAt,
-                category: 'other',
-                sentiment: 'neutral',
-                importance: 'medium',
-                related_stocks: relatedStocks,
-                is_premium: false
-              });
-            }
-          });
-          sources.push('NewsAPI');
-        }
-      } catch (e) {
-        console.error('NewsAPI error:', e);
-      }
-    }
-    
-    // 3. Marketaux - 美股新闻
-    if (marketauxKey) {
-      try {
-        const symbols = US_STOCKS.slice(0, 30).join(',');
-        const url = `https://api.marketaux.com/v1/news/all?symbols=${symbols}&filter_entities=true&language=en&limit=30&api_token=${marketauxKey}`;
-        const res = await fetch(url);
-        const data = await res.json();
-        
-        if (data.data) {
-          data.data.forEach(item => {
-            const relatedStocks = item.entities?.map(e => e.symbol).filter(s => US_STOCKS.includes(s)) || [];
-            
-            allNews.push({
-              title: item.title,
-              summary: item.description || item.title.substring(0, 200),
-              content: item.description || item.title,
-              source: item.source || 'Marketaux',
-              source_url: item.url,
-              published_at: item.published_at,
-              category: 'other',
-              sentiment: item.sentiment || 'neutral',
-              importance: 'medium',
-              related_stocks: relatedStocks,
-              is_premium: false
-            });
-          });
-          sources.push('Marketaux');
-        }
-      } catch (e) {
-        console.error('Marketaux error:', e);
-      }
-    }
-    
-    // 4. Polygon.io - 美股新闻
-    if (polygonKey) {
-      try {
-        const url = `https://api.polygon.io/v2/reference/news?limit=30&apiKey=${polygonKey}`;
-        const res = await fetch(url);
-        const data = await res.json();
-        
-        if (data.results) {
-          data.results.forEach(item => {
-            const relatedStocks = item.tickers?.filter(t => US_STOCKS.includes(t)) || [];
-            
-            if (relatedStocks.length > 0) {
-              allNews.push({
-                title: item.title,
-                summary: item.description || item.title.substring(0, 200),
-                content: item.description || item.title,
-                source: item.publisher?.name || 'Polygon',
-                source_url: item.article_url,
-                published_at: item.published_utc,
-                category: 'other',
-                sentiment: 'neutral',
-                importance: 'medium',
-                related_stocks: relatedStocks,
-                is_premium: false
-              });
-            }
-          });
-          sources.push('Polygon.io');
-        }
-      } catch (e) {
-        console.error('Polygon error:', e);
-      }
-    }
-    
-    // 5. Alpha Vantage - 美股新闻
+
+    // Alpha Vantage - 美股新闻
     if (alphaVantageKey) {
       try {
         const topics = ['technology', 'finance', 'earnings'];
@@ -239,10 +91,52 @@ Deno.serve(async (req) => {
           await new Promise(resolve => setTimeout(resolve, 1000));
         }
         sources.push('Alpha Vantage');
-      } catch (e) {
+        } catch (e) {
         console.error('Alpha Vantage error:', e);
-      }
-    }
+        }
+        }
+
+        // Yahoo Finance RSS (免费)
+        try {
+        const symbols = US_STOCKS.slice(0, 10);
+        for (const symbol of symbols) {
+        try {
+          const url = `https://feeds.finance.yahoo.com/rss/2.0/headline?s=${symbol}&region=US&lang=en-US`;
+          const res = await fetch(url);
+          const text = await res.text();
+
+          // 简单解析RSS
+          const items = text.match(/<item>[\s\S]*?<\/item>/g) || [];
+          items.slice(0, 3).forEach(item => {
+            const title = item.match(/<title><!\[CDATA\[(.*?)\]\]><\/title>/)?.[1] || '';
+            const link = item.match(/<link>(.*?)<\/link>/)?.[1] || '';
+            const pubDate = item.match(/<pubDate>(.*?)<\/pubDate>/)?.[1] || '';
+
+            if (title && link) {
+              allNews.push({
+                title: `【${symbol}】${title}`,
+                summary: title,
+                content: title,
+                source: 'Yahoo Finance',
+                source_url: link,
+                published_at: pubDate ? new Date(pubDate).toISOString() : new Date().toISOString(),
+                category: 'other',
+                sentiment: 'neutral',
+                importance: 'medium',
+                related_stocks: [symbol],
+                is_premium: false
+              });
+            }
+          });
+          await new Promise(resolve => setTimeout(resolve, 500));
+        } catch (e) {
+          console.log(`Yahoo ${symbol}:`, e.message);
+        }
+        }
+        sources.push('Yahoo Finance');
+        } catch (e) {
+        console.error('Yahoo Finance error:', e);
+        }
     
     // 获取已有新闻
     const existingNews = await base44.asServiceRole.entities.NewsFlash.list('-created_date', 200);
