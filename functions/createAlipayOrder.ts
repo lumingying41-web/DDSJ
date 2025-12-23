@@ -46,7 +46,7 @@ Deno.serve(async (req) => {
       }
     });
 
-    console.log('Alipay result:', result);
+    console.log('完整SDK返回:', JSON.stringify(result, null, 2));
 
     if (result.qrCode) {
       // 生成二维码图片URL
