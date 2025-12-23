@@ -66,13 +66,13 @@ export default function PaymentMethod() {
           plan: plan,
           amount: parseFloat(amount)
         });
-        
+
         if (response.data.success) {
-          const paymentUrl = response.data.payment_url;
+          const qrImageUrl = response.data.qr_image_url;
           const orderId = response.data.order_id;
-          
-          // 跳转到支付页面
-          navigate(createPageUrl(`PaymentQRCode?order_id=${orderId}&payment_url=${encodeURIComponent(paymentUrl)}&method=alipay`));
+
+          // 跳转到支付页面显示二维码
+          navigate(createPageUrl(`PaymentQRCode?order_id=${orderId}&qr_image_url=${encodeURIComponent(qrImageUrl)}&method=alipay`));
         }
       } else if (method.id === 'paypal') {
         // PayPal支付流程

@@ -14,7 +14,7 @@ export default function PaymentQRCode() {
   
   const urlParams = new URLSearchParams(window.location.search);
   const orderId = urlParams.get('order_id');
-  const qrUrl = urlParams.get('qr_url');
+  const qrUrl = urlParams.get('qr_url') || urlParams.get('qr_image_url');
   const paymentUrl = urlParams.get('payment_url');
   const method = urlParams.get('method');
   
@@ -123,24 +123,14 @@ export default function PaymentQRCode() {
                   </div>
                 )}
                 
-                {/* 支付宝链接 */}
-                {method === 'alipay' && paymentUrl && (
+                {/* 支付宝二维码 */}
+                {method === 'alipay' && qrUrl && (
                   <div className="mb-6">
-                    <div className="inline-block p-8 bg-gradient-to-br from-blue-500/10 to-blue-600/10 rounded-xl border border-blue-500/20">
-                      <div className="text-6xl mb-4">💙</div>
-                      <p className="text-white font-medium mb-4">支付宝支付</p>
-                      <Button 
-                        className="bg-blue-500 hover:bg-blue-400 text-white"
-                        onClick={() => {
-                          // 直接跳转到支付宝支付页面
-                          window.location.href = paymentUrl;
-                        }}
-                      >
-                        前往支付宝支付
-                      </Button>
+                    <div className="inline-block p-4 bg-white rounded-xl">
+                      <img src={qrUrl} alt="支付二维码" className="w-64 h-64" />
                     </div>
                     <p className="text-slate-400 mt-4">
-                      点击按钮跳转到支付宝完成支付
+                      请使用支付宝扫描二维码完成支付
                     </p>
                   </div>
                 )}
