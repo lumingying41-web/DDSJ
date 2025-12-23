@@ -131,9 +131,12 @@ export default function PaymentQRCode() {
                       <p className="text-white font-medium mb-4">支付宝支付</p>
                       <Button 
                         className="bg-blue-500 hover:bg-blue-400 text-white"
-                        onClick={() => window.open(paymentUrl, '_blank')}
+                        onClick={() => {
+                          // 直接跳转到支付宝支付页面
+                          window.location.href = paymentUrl;
+                        }}
                       >
-                        打开支付宝支付
+                        前往支付宝支付
                       </Button>
                     </div>
                     <p className="text-slate-400 mt-4">

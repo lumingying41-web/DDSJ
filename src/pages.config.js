@@ -4,6 +4,7 @@ import Institution from './pages/Institution';
 import LanguageSelector from './pages/LanguageSelector';
 import NewsDetail from './pages/NewsDetail';
 import PaymentMethod from './pages/PaymentMethod';
+import PaymentQRCode from './pages/PaymentQRCode';
 import Preferences from './pages/Preferences';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import Profile from './pages/Profile';
@@ -12,7 +13,6 @@ import Research from './pages/Research';
 import ResearchDetail from './pages/ResearchDetail';
 import Search from './pages/Search';
 import Subscription from './pages/Subscription';
-import PaymentQRCode from './pages/PaymentQRCode';
 import __Layout from './Layout.jsx';
 
 
@@ -23,6 +23,7 @@ export const PAGES = {
     "LanguageSelector": LanguageSelector,
     "NewsDetail": NewsDetail,
     "PaymentMethod": PaymentMethod,
+    "PaymentQRCode": PaymentQRCode,
     "Preferences": Preferences,
     "PrivacyPolicy": PrivacyPolicy,
     "Profile": Profile,
@@ -31,7 +32,6 @@ export const PAGES = {
     "ResearchDetail": ResearchDetail,
     "Search": Search,
     "Subscription": Subscription,
-    "PaymentQRCode": PaymentQRCode,
 }
 
 export const pagesConfig = {
