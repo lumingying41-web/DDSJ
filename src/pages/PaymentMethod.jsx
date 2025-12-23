@@ -89,7 +89,8 @@ export default function PaymentMethod() {
         }
       }
     } catch (error) {
-      alert('支付失败: ' + error.message);
+      console.error('Payment error:', error);
+      alert('支付失败: ' + (error.response?.data?.error || error.message));
       setSelectedMethod(null);
     }
   };
