@@ -36,23 +36,17 @@ Deno.serve(async (req) => {
     });
     
     // 使用真实支付宝 SDK 创建当面付订单
-    const formData = new AlipayFormData();
-    formData.setMethod('get');
-    
-    formData.addField('notifyUrl', `${new URL(req.url).origin}/api/functions/alipayCallback`);
-    formData.addField('bizContent', {
-      outTradeNo: orderNumber,
-      totalAmount: amount.toString(),
-      subject: `顶点视角会员-${plan === 'monthly' ? '月度' : plan === 'yearly' ? '年度' : '终身'}`,
-      productCode: 'FACE_TO_FACE_PAYMENT',
-      qrCodeTimeoutExpress: '15m',
+    const result = await alipaySdk.exec('alipay.trade.precreate', {
+      notifyUrl: `${new URL(req.url).origin}/api/functions/alipayCallback`,
+      bizContent: {
+        out_trade_no: orderNumber,
+        total_amount: amount.toString(),
+        subject: `顶点视角会员-${plan === 'monthly' ? '月度' : plan === 'yearly' ? '年度' : '终身'}`,
+        qr_code_timeout_express: '15m',
+      }
     });
 
-    const result = await alipaySdk.exec(
-      'alipay.trade.precreate',
-      {},
-      { formData }
-    );
+    console.log('Alipay result:', result);
 
     if (result.qrCode) {
       // 生成二维码图片URL
