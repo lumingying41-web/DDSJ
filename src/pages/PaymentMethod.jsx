@@ -26,13 +26,6 @@ export default function PaymentMethod() {
       available: true,
     },
     {
-      id: 'alipay',
-      name: '支付宝',
-      description: '使用支付宝扫码或跳转支付',
-      icon: '💙',
-      available: true,
-    },
-    {
       id: 'paypal',
       name: 'PayPal',
       description: '使用 PayPal 安全支付',
@@ -59,20 +52,6 @@ export default function PaymentMethod() {
           
           // 跳转到支付页面显示二维码
           navigate(createPageUrl(`PaymentQRCode?order_id=${orderId}&qr_url=${encodeURIComponent(qrUrl)}&method=wechat`));
-        }
-      } else if (method.id === 'alipay') {
-        // 创建支付宝订单
-        const response = await base44.functions.invoke('createAlipayOrder', {
-          plan: plan,
-          amount: parseFloat(amount)
-        });
-
-        if (response.data.success) {
-          const qrImageUrl = response.data.qr_image_url;
-          const orderId = response.data.order_id;
-
-          // 跳转到支付页面显示二维码
-          navigate(createPageUrl(`PaymentQRCode?order_id=${orderId}&qr_image_url=${encodeURIComponent(qrImageUrl)}&method=alipay`));
         }
       } else if (method.id === 'paypal') {
         // PayPal支付流程
