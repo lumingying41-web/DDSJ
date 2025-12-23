@@ -36,6 +36,7 @@ Deno.serve(async (req) => {
     });
     
     // 使用真实支付宝 SDK 创建当面付订单
+    console.log('开始调用支付宝API...');
     const result = await alipaySdk.exec('alipay.trade.precreate', {
       notifyUrl: `${new URL(req.url).origin}/api/functions/alipayCallback`,
       bizContent: {
@@ -46,9 +47,12 @@ Deno.serve(async (req) => {
       }
     });
 
-    console.log('完整SDK返回:', JSON.stringify(result, null, 2));
+    console.log('SDK返回类型:', typeof result);
+    console.log('SDK返回内容:', result);
+    console.log('qrCode字段:', result?.qrCode);
+    console.log('所有字段:', Object.keys(result || {}));
 
-    if (result.qrCode) {
+    if (result && result.qrCode) {
       // 生成二维码图片URL
       const qrImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(result.qrCode)}`;
       
