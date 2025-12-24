@@ -8,7 +8,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 import NewsCard from '@/components/news/NewsCard';
 import NewsFilter from '@/components/news/NewsFilter';
 import SubscriptionBanner from '@/components/subscription/SubscriptionBanner';
-import MarketIndices from '@/components/common/MarketIndices';
 
 export default function Home() {
   const [activeCategory, setActiveCategory] = useState('all');
@@ -83,9 +82,6 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-[#070D18]">
-      {/* Market Indices */}
-      <MarketIndices />
-      
       {/* Header */}
       <div className="sticky top-0 z-40 bg-[#070D18]/95 backdrop-blur-lg border-b border-slate-800/50">
         <div className="max-w-4xl mx-auto px-4 py-4">
