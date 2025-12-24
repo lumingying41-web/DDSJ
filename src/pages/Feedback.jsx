@@ -94,7 +94,7 @@ export default function Feedback() {
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
                 placeholder="请详细描述您的问题或建议..."
-                className="bg-slate-900/50 border-slate-700 text-white min-h-[150px]"
+                className="bg-slate-800/30 border-slate-700/50 min-h-[150px]"
                 required
               />
             </div>
