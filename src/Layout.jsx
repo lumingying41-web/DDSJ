@@ -163,6 +163,10 @@ export default function Layout({ children, currentPageName }) {
         body.theme-white .border-slate-800\\/50 { border-color: #e2e8f0 !important; }
         body.theme-white .border-slate-700\\/50 { border-color: #cbd5e1 !important; }
 
+        /* 修复框框黑色问题 */
+        body.theme-white .border { border-color: #e2e8f0 !important; }
+        body.theme-white [class*="border-"] { border-color: #e2e8f0 !important; }
+
         /* Hover 状态 */
         body.theme-white .hover\\:bg-slate-900:hover { background-color: #f8f9fa !important; }
         body.theme-white .hover\\:bg-slate-800:hover { background-color: #f1f5f9 !important; }

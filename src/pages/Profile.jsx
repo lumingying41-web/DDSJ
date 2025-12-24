@@ -9,7 +9,7 @@ import { zhCN } from 'date-fns/locale';
 import { 
   User, Crown, Bookmark, Bell, Settings, LogOut, 
   ChevronRight, Shield, Calendar, CreditCard, TrendingUp,
-  Building2, FileText, Zap, Palette
+  Building2, FileText, Zap, Palette, MessageCircle
 } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -335,6 +335,16 @@ export default function Profile() {
                     </span>
                     <ChevronRight className="w-4 h-4 text-slate-500" />
                   </div>
+                </div>
+              </Link>
+
+              <Link to={createPageUrl('Feedback')}>
+                <div className="flex items-center justify-between py-2 hover:bg-slate-700/30 rounded-lg px-2 -mx-2 transition-colors">
+                  <div className="flex items-center gap-3">
+                    <MessageCircle className="w-4 h-4 text-slate-400" />
+                    <span className="text-sm text-slate-300">联系客服</span>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-slate-500" />
                 </div>
               </Link>
               
