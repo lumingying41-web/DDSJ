@@ -15,7 +15,7 @@ export default function PaymentQRCode() {
   const urlParams = new URLSearchParams(window.location.search);
   const orderId = urlParams.get('order_id');
   const qrUrl = urlParams.get('qr_url') || urlParams.get('qr_image_url');
-  const paymentUrl = urlParams.get('payment_url');
+  const paymentUrl = urlParams.get('payment_url') || urlParams.get('pay_url');
   const method = urlParams.get('method');
   
   // 倒计时
