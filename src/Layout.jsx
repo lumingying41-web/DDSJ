@@ -59,7 +59,7 @@ export default function Layout({ children, currentPageName }) {
     const body = document.body;
     
     // 移除所有主题类
-    body.classList.remove('theme-dark', 'theme-blue', 'theme-purple', 'theme-green', 'theme-white');
+    body.classList.remove('theme-dark', 'theme-white');
     
     // 添加新主题类
     body.classList.add(`theme-${theme || 'dark'}`);
@@ -102,36 +102,6 @@ export default function Layout({ children, currentPageName }) {
         }
         body.theme-dark .bg-\\[\\#070D18\\] { background-color: #070D18 !important; }
         body.theme-dark .bg-\\[\\#0F1A2E\\] { background-color: #0F1A2E !important; }
-
-        /* 海洋蓝主题 */
-        body.theme-blue {
-          background-color: #0A1628;
-          color: white;
-        }
-        body.theme-blue .bg-\\[\\#070D18\\] { background-color: #0A1628 !important; }
-        body.theme-blue .bg-\\[\\#0F1A2E\\] { background-color: #132744 !important; }
-        body.theme-blue .bg-slate-800\\/40 { background-color: rgba(30, 58, 95, 0.4) !important; }
-        body.theme-blue .bg-slate-800\\/50 { background-color: rgba(30, 58, 95, 0.5) !important; }
-
-        /* 星云紫主题 */
-        body.theme-purple {
-          background-color: #1a0b2e;
-          color: white;
-        }
-        body.theme-purple .bg-\\[\\#070D18\\] { background-color: #1a0b2e !important; }
-        body.theme-purple .bg-\\[\\#0F1A2E\\] { background-color: #2d1b4e !important; }
-        body.theme-purple .bg-slate-800\\/40 { background-color: rgba(69, 39, 108, 0.4) !important; }
-        body.theme-purple .bg-slate-800\\/50 { background-color: rgba(69, 39, 108, 0.5) !important; }
-
-        /* 森林绿主题 */
-        body.theme-green {
-          background-color: #0d1f17;
-          color: white;
-        }
-        body.theme-green .bg-\\[\\#070D18\\] { background-color: #0d1f17 !important; }
-        body.theme-green .bg-\\[\\#0F1A2E\\] { background-color: #1a3d2e !important; }
-        body.theme-green .bg-slate-800\\/40 { background-color: rgba(38, 70, 54, 0.4) !important; }
-        body.theme-green .bg-slate-800\\/50 { background-color: rgba(38, 70, 54, 0.5) !important; }
 
         /* 简约白主题 */
         body.theme-white {
