@@ -105,28 +105,38 @@ export default function Layout({ children, currentPageName }) {
 
         /* 简约白主题 */
         body.theme-white {
-          background-color: #ffffff;
-          color: #000000;
+          background-color: #ffffff !important;
+          color: #000000 !important;
+        }
+        body.theme-white * {
+          border-color: #e2e8f0 !important;
         }
         body.theme-white .bg-\\[\\#070D18\\] { background-color: #f8f9fa !important; }
         body.theme-white .bg-\\[\\#0F1A2E\\] { background-color: #ffffff !important; }
         body.theme-white .bg-slate-900 { background-color: #ffffff !important; }
-        body.theme-white .bg-slate-800 { background-color: #f1f5f9 !important; }
-        body.theme-white .bg-slate-800\\/95 { background-color: rgba(241, 245, 249, 0.95) !important; }
-        body.theme-white .bg-slate-800\\/40 { background-color: rgba(241, 245, 249, 0.8) !important; }
-        body.theme-white .bg-slate-800\\/50 { background-color: rgba(241, 245, 249, 0.9) !important; }
-        body.theme-white .bg-slate-800\\/30 { background-color: rgba(241, 245, 249, 0.6) !important; }
-        body.theme-white .bg-slate-700 { background-color: #e2e8f0 !important; }
+        body.theme-white .bg-slate-800 { background-color: #ffffff !important; }
+        body.theme-white .bg-slate-800\\/95 { background-color: rgba(255, 255, 255, 0.95) !important; }
+        body.theme-white .bg-slate-800\\/80 { background-color: rgba(255, 255, 255, 0.9) !important; }
+        body.theme-white .bg-slate-800\\/40 { background-color: rgba(248, 249, 250, 0.9) !important; }
+        body.theme-white .bg-slate-800\\/50 { background-color: rgba(248, 249, 250, 0.95) !important; }
+        body.theme-white .bg-slate-800\\/30 { background-color: rgba(248, 249, 250, 0.8) !important; }
+        body.theme-white .bg-slate-700 { background-color: #f1f5f9 !important; }
+        body.theme-white .bg-slate-700\\/50 { background-color: rgba(241, 245, 249, 0.8) !important; }
+        body.theme-white .bg-slate-600 { background-color: #e2e8f0 !important; }
+        body.theme-white .bg-gray-900 { background-color: #ffffff !important; }
+        body.theme-white .bg-gray-800 { background-color: #f8f9fa !important; }
         body.theme-white .text-white { color: #000000 !important; }
-        body.theme-white .text-slate-400 { color: #6b7280 !important; }
-        body.theme-white .text-slate-300 { color: #374151 !important; }
-        body.theme-white .text-slate-500 { color: #6b7280 !important; }
-        body.theme-white .border-slate-800\\/50 { border-color: rgba(226, 232, 240, 0.8) !important; }
-        body.theme-white .border-slate-700\\/50 { border-color: rgba(203, 213, 225, 0.8) !important; }
+        body.theme-white .text-slate-400 { color: #64748b !important; }
+        body.theme-white .text-slate-300 { color: #475569 !important; }
+        body.theme-white .text-slate-500 { color: #64748b !important; }
+        body.theme-white .text-slate-600 { color: #475569 !important; }
+        body.theme-white .border-slate-800\\/50 { border-color: #e2e8f0 !important; }
+        body.theme-white .border-slate-700\\/50 { border-color: #cbd5e1 !important; }
         body.theme-white .border-slate-700 { border-color: #cbd5e1 !important; }
         body.theme-white .border-slate-800 { border-color: #e2e8f0 !important; }
-        body.theme-white .hover\\:bg-slate-800:hover { background-color: #e2e8f0 !important; }
-        body.theme-white .hover\\:bg-slate-700\\/50:hover { background-color: rgba(226, 232, 240, 0.5) !important; }
+        body.theme-white .hover\\:bg-slate-800:hover { background-color: #f1f5f9 !important; }
+        body.theme-white .hover\\:bg-slate-700\\/50:hover { background-color: rgba(241, 245, 249, 0.8) !important; }
+        body.theme-white .hover\\:bg-slate-700\\/30:hover { background-color: rgba(241, 245, 249, 0.6) !important; }
 
         .scrollbar-hide::-webkit-scrollbar {
           display: none;
