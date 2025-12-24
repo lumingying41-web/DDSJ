@@ -28,7 +28,7 @@ const getPricing = (region, currency) => {
         {
           id: 'monthly',
           name: '月度会员',
-          price: 0.5,
+          price: 0,
           originalPrice: 2,
           period: '月',
           features: [
@@ -43,10 +43,10 @@ const getPricing = (region, currency) => {
         {
           id: 'yearly',
           name: '年度会员',
-          price: 2,
+          price: 0,
           originalPrice: 6,
           period: '年',
-          monthlyPrice: 0.17,
+          monthlyPrice: 0,
           features: [
             '月度会员全部权益',
             '优先获取独家研报',
@@ -60,7 +60,7 @@ const getPricing = (region, currency) => {
         {
           id: 'lifetime',
           name: '终身会员',
-          price: 20,
+          price: 0,
           originalPrice: 60,
           period: '永久',
           features: [
@@ -82,7 +82,7 @@ const getPricing = (region, currency) => {
         {
           id: 'monthly',
           name: 'Monthly',
-          price: 2,
+          price: 0,
           originalPrice: 4,
           period: 'month',
           features: [
@@ -97,10 +97,10 @@ const getPricing = (region, currency) => {
         {
           id: 'yearly',
           name: 'Annual',
-          price: 19,
+          price: 0,
           originalPrice: 48,
           period: 'year',
-          monthlyPrice: 1.6,
+          monthlyPrice: 0,
           features: [
             'All monthly benefits',
             'Exclusive research priority',
@@ -114,7 +114,7 @@ const getPricing = (region, currency) => {
         {
           id: 'lifetime',
           name: 'Lifetime',
-          price: 58,
+          price: 0,
           originalPrice: 128,
           period: 'lifetime',
           features: [
