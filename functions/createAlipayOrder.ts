@@ -53,14 +53,31 @@ Deno.serve(async (req) => {
     console.log('所有字段:', Object.keys(result || {}));
 
     if (result && result.qrCode) {
-      // 生成二维码图片URL
-      const qrImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(result.qrCode)}`;
+      // 沙箱环境：生成支付宝网页版支付链接
+      const sandboxPayUrl = `https://openapi-sandbox.dl.alipaydev.com/gateway.do?${new URLSearchParams({
+        charset: 'utf-8',
+        method: 'alipay.trade.wap.pay',
+        sign_type: 'RSA2',
+        timestamp: new Date().toISOString().replace('T', ' ').substring(0, 19),
+        version: '1.0',
+        notify_url: `${new URL(req.url).origin}/api/functions/alipayCallback`,
+        app_id: '9021000158673541',
+        biz_content: JSON.stringify({
+          out_trade_no: orderNumber,
+          total_amount: amount.toString(),
+          subject: `顶点视角会员-${plan === 'monthly' ? '月度' : plan === 'yearly' ? '年度' : '终身'}`,
+          product_code: 'QUICK_WAP_WAY'
+        })
+      })}`;
+      
+      // 生成二维码图片URL，使用网页支付链接
+      const qrImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(sandboxPayUrl)}`;
       
       return Response.json({
         success: true,
         order_id: order.id,
         order_number: orderNumber,
-        qr_code: result.qrCode,
+        qr_code: sandboxPayUrl,
         qr_image_url: qrImageUrl,
         amount: amount,
         expires_at: new Date(Date.now() + 15 * 60 * 1000).toISOString()
