@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
-import { Shield, FileText, Zap, Building2 } from 'lucide-react';
+import { Shield, FileText, Zap, Building2, MessageCircle } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import NewsManager from '@/components/admin/NewsManager';
 import ResearchManager from '@/components/admin/ResearchManager';
 import ReportManager from '@/components/admin/ReportManager';
+import FeedbackManager from '@/components/admin/FeedbackManager';
 
 export default function Admin() {
   const [user, setUser] = useState(null);
@@ -69,7 +70,11 @@ export default function Admin() {
             </TabsTrigger>
             <TabsTrigger value="reports" className="data-[state=active]:bg-amber-500/20 data-[state=active]:text-amber-400">
               <Building2 className="w-4 h-4 mr-2" />
-              机构报告管理
+              机构报告
+            </TabsTrigger>
+            <TabsTrigger value="feedback" className="data-[state=active]:bg-amber-500/20 data-[state=active]:text-amber-400">
+              <MessageCircle className="w-4 h-4 mr-2" />
+              用户反馈
             </TabsTrigger>
           </TabsList>
 
@@ -83,6 +88,10 @@ export default function Admin() {
 
           <TabsContent value="reports">
             <ReportManager />
+          </TabsContent>
+
+          <TabsContent value="feedback">
+            <FeedbackManager />
           </TabsContent>
         </Tabs>
       </div>
