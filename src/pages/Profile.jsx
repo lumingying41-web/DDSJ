@@ -105,7 +105,8 @@ export default function Profile() {
     { id: 'dark', name: '暗夜黑', color: 'bg-slate-900' },
     { id: 'blue', name: '深海蓝', color: 'bg-blue-900' },
     { id: 'purple', name: '神秘紫', color: 'bg-purple-900' },
-    { id: 'green', name: '森林绿', color: 'bg-green-900' }
+    { id: 'green', name: '森林绿', color: 'bg-green-900' },
+    { id: 'white', name: '简约白', color: 'bg-gray-100' }
   ];
 
   if (isLoading) {
@@ -292,7 +293,7 @@ export default function Profile() {
                   <Palette className="w-4 h-4 text-slate-400" />
                   <span className="text-sm text-slate-300">主题皮肤</span>
                 </div>
-                <div className="grid grid-cols-4 gap-2">
+                <div className="grid grid-cols-5 gap-2">
                   {themes.map((theme) => (
                     <button
                       key={theme.id}
