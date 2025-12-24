@@ -2,6 +2,26 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.6';
 import AlipaySdk from 'npm:alipay-sdk@3.4.0';
 import AlipayFormData from 'npm:alipay-sdk@3.4.0/lib/form.js';
 
+// 辅助函数：生成签名
+function generateSign(params, privateKey) {
+  const sortedParams = Object.keys(params)
+    .filter(key => key !== 'sign' && params[key] !== '' && params[key] !== null && params[key] !== undefined)
+    .sort()
+    .map(key => `${key}=${params[key]}`)
+    .join('&');
+  
+  // 使用crypto进行RSA签名
+  const sign = crypto.subtle.importKey(
+    'pkcs8',
+    privateKey,
+    { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' },
+    false,
+    ['sign']
+  );
+  
+  return sign;
+}
+
 // 支付宝沙箱环境配置
 const alipaySdk = new AlipaySdk({
   appId: '9021000158673541',
