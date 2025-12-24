@@ -35,50 +35,34 @@ Deno.serve(async (req) => {
       order_number: orderNumber
     });
     
-    // 使用真实支付宝 SDK 创建当面付订单
+    // 使用网页支付接口（沙箱环境）
     console.log('开始调用支付宝API...');
-    const result = await alipaySdk.exec('alipay.trade.precreate', {
+    const result = await alipaySdk.exec('alipay.trade.page.pay', {
       notifyUrl: `${new URL(req.url).origin}/api/functions/alipayCallback`,
+      returnUrl: `${new URL(req.url).origin}`,
       bizContent: {
         out_trade_no: orderNumber,
         total_amount: amount.toString(),
         subject: `顶点视角会员-${plan === 'monthly' ? '月度' : plan === 'yearly' ? '年度' : '终身'}`,
-        qr_code_timeout_express: '15m',
+        product_code: 'FAST_INSTANT_TRADE_PAY',
+        timeout_express: '15m',
       }
     });
 
-    console.log('SDK返回类型:', typeof result);
-    console.log('SDK返回内容:', result);
-    console.log('qrCode字段:', result?.qrCode);
-    console.log('所有字段:', Object.keys(result || {}));
+    console.log('SDK返回:', result);
 
-    if (result && result.qrCode) {
-      // 沙箱环境：生成支付宝网页版支付链接
-      const sandboxPayUrl = `https://openapi-sandbox.dl.alipaydev.com/gateway.do?${new URLSearchParams({
-        charset: 'utf-8',
-        method: 'alipay.trade.wap.pay',
-        sign_type: 'RSA2',
-        timestamp: new Date().toISOString().replace('T', ' ').substring(0, 19),
-        version: '1.0',
-        notify_url: `${new URL(req.url).origin}/api/functions/alipayCallback`,
-        app_id: '9021000158673541',
-        biz_content: JSON.stringify({
-          out_trade_no: orderNumber,
-          total_amount: amount.toString(),
-          subject: `顶点视角会员-${plan === 'monthly' ? '月度' : plan === 'yearly' ? '年度' : '终身'}`,
-          product_code: 'QUICK_WAP_WAY'
-        })
-      })}`;
-      
-      // 生成二维码图片URL，使用网页支付链接
-      const qrImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(sandboxPayUrl)}`;
+    if (result) {
+      // result 就是支付链接
+      const payUrl = `https://openapi-sandbox.dl.alipaydev.com/gateway.do?${result}`;
+      const qrImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(payUrl)}`;
       
       return Response.json({
         success: true,
         order_id: order.id,
         order_number: orderNumber,
-        qr_code: sandboxPayUrl,
+        qr_code: payUrl,
         qr_image_url: qrImageUrl,
+        pay_url: payUrl,
         amount: amount,
         expires_at: new Date(Date.now() + 15 * 60 * 1000).toISOString()
       });
