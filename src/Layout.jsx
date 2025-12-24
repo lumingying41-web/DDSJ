@@ -115,6 +115,8 @@ export default function Layout({ children, currentPageName }) {
         body.theme-white .min-h-screen { background-color: #ffffff !important; }
         body.theme-white .bg-\\[\\#070D18\\] { background-color: #ffffff !important; }
         body.theme-white .bg-\\[\\#0F1A2E\\] { background-color: #ffffff !important; }
+        body.theme-white .bg-\\[\\#070D18\\]\\/95 { background-color: rgba(255, 255, 255, 0.98) !important; }
+        body.theme-white .bg-\\[\\#0F1A2E\\]\\/80 { background-color: rgba(255, 255, 255, 0.95) !important; }
 
         /* Slate 颜色系列 */
         body.theme-white .bg-slate-950 { background-color: #ffffff !important; }
