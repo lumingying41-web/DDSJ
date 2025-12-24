@@ -5,23 +5,13 @@ import { createPageUrl } from '@/utils';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Send, MessageCircle } from 'lucide-react';
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { toast } from "sonner";
 
 export default function Feedback() {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
-  const [type, setType] = useState('question');
-  const [subject, setSubject] = useState('');
   const [content, setContent] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -50,8 +40,8 @@ export default function Feedback() {
       await base44.entities.Feedback.create({
         user_email: user.email,
         user_name: user.full_name || '用户',
-        type,
-        subject: subject || '无主题',
+        type: 'question',
+        subject: '用户反馈',
         content,
         status: 'pending'
       });
@@ -66,7 +56,7 @@ export default function Feedback() {
   };
 
   return (
-    <div className="min-h-screen bg-[#070D18]">
+    <div className="min-h-screen">
       <div className="sticky top-0 z-10 bg-[#070D18]/95 backdrop-blur-lg border-b border-slate-800/50">
         <div className="max-w-2xl mx-auto px-4 py-4 flex items-center gap-4">
           <Button
@@ -98,31 +88,6 @@ export default function Feedback() {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <Label className="text-slate-300">反馈类型</Label>
-              <Select value={type} onValueChange={setType}>
-                <SelectTrigger className="bg-slate-900/50 border-slate-700 text-white">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent className="bg-slate-800 border-slate-700">
-                  <SelectItem value="bug">Bug反馈</SelectItem>
-                  <SelectItem value="feature">功能建议</SelectItem>
-                  <SelectItem value="question">使用咨询</SelectItem>
-                  <SelectItem value="other">其他</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div>
-              <Label className="text-slate-300">主题（可选）</Label>
-              <Input
-                value={subject}
-                onChange={(e) => setSubject(e.target.value)}
-                placeholder="简要描述问题"
-                className="bg-slate-900/50 border-slate-700 text-white"
-              />
-            </div>
-
             <div>
               <Label className="text-slate-300">详细内容 *</Label>
               <Textarea
