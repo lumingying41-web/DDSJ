@@ -37,22 +37,30 @@ Deno.serve(async (req) => {
     
     // 使用网页支付接口（沙箱环境）
     console.log('开始调用支付宝API...');
-    const result = await alipaySdk.exec('alipay.trade.page.pay', {
-      notifyUrl: `${new URL(req.url).origin}/api/functions/alipayCallback`,
-      returnUrl: `${new URL(req.url).origin}`,
-      bizContent: {
-        out_trade_no: orderNumber,
-        total_amount: amount.toString(),
-        subject: `顶点视角会员-${plan === 'monthly' ? '月度' : plan === 'yearly' ? '年度' : '终身'}`,
-        product_code: 'FAST_INSTANT_TRADE_PAY',
-        timeout_express: '15m',
-      }
+    
+    // 使用 pageExecute 方法，返回完整的HTML表单，但我们从中提取URL
+    const formData = new AlipayFormData();
+    formData.setMethod('get');
+    formData.addField('notifyUrl', `${new URL(req.url).origin}/api/functions/alipayCallback`);
+    formData.addField('returnUrl', `${new URL(req.url).origin}`);
+    formData.addField('bizContent', {
+      out_trade_no: orderNumber,
+      total_amount: amount.toString(),
+      subject: `顶点视角会员-${plan === 'monthly' ? '月度' : plan === 'yearly' ? '年度' : '终身'}`,
+      product_code: 'FAST_INSTANT_TRADE_PAY',
+      timeout_express: '15m',
     });
+
+    const result = await alipaySdk.exec(
+      'alipay.trade.page.pay',
+      {},
+      { formData: formData }
+    );
 
     console.log('SDK返回:', result);
 
     if (result) {
-      // result 就是支付链接
+      // result 是完整的URL字符串（使用GET方法时）
       const payUrl = `https://openapi-sandbox.dl.alipaydev.com/gateway.do?${result}`;
       const qrImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(payUrl)}`;
       
