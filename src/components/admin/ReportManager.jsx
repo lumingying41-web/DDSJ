@@ -149,12 +149,6 @@ export default function ReportManager() {
           </div>
 
           <Textarea
-            placeholder="摘要"
-            value={formData.summary}
-            onChange={(e) => setFormData({...formData, summary: e.target.value})}
-            className="bg-slate-900 border-slate-700 text-white"
-          />
-          <Textarea
             placeholder="完整内容"
             value={formData.content}
             onChange={(e) => setFormData({...formData, content: e.target.value})}
