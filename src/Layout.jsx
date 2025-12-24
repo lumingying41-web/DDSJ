@@ -111,32 +111,63 @@ export default function Layout({ children, currentPageName }) {
         body.theme-white * {
           border-color: #e2e8f0 !important;
         }
-        body.theme-white .bg-\\[\\#070D18\\] { background-color: #f8f9fa !important; }
+        /* 主背景色 */
+        body.theme-white .min-h-screen { background-color: #ffffff !important; }
+        body.theme-white .bg-\\[\\#070D18\\] { background-color: #ffffff !important; }
         body.theme-white .bg-\\[\\#0F1A2E\\] { background-color: #ffffff !important; }
+
+        /* Slate 颜色系列 */
+        body.theme-white .bg-slate-950 { background-color: #ffffff !important; }
         body.theme-white .bg-slate-900 { background-color: #ffffff !important; }
         body.theme-white .bg-slate-800 { background-color: #ffffff !important; }
-        body.theme-white .bg-slate-800\\/95 { background-color: rgba(255, 255, 255, 0.95) !important; }
-        body.theme-white .bg-slate-800\\/80 { background-color: rgba(255, 255, 255, 0.9) !important; }
-        body.theme-white .bg-slate-800\\/40 { background-color: rgba(248, 249, 250, 0.9) !important; }
-        body.theme-white .bg-slate-800\\/50 { background-color: rgba(248, 249, 250, 0.95) !important; }
-        body.theme-white .bg-slate-800\\/30 { background-color: rgba(248, 249, 250, 0.8) !important; }
-        body.theme-white .bg-slate-700 { background-color: #f1f5f9 !important; }
-        body.theme-white .bg-slate-700\\/50 { background-color: rgba(241, 245, 249, 0.8) !important; }
-        body.theme-white .bg-slate-600 { background-color: #e2e8f0 !important; }
+        body.theme-white .bg-slate-700 { background-color: #f8f9fa !important; }
+        body.theme-white .bg-slate-600 { background-color: #f1f5f9 !important; }
+
+        /* Slate 透明度变体 */
+        body.theme-white .bg-slate-950\\/95 { background-color: rgba(255, 255, 255, 0.98) !important; }
+        body.theme-white .bg-slate-900\\/95 { background-color: rgba(255, 255, 255, 0.98) !important; }
+        body.theme-white .bg-slate-800\\/95 { background-color: rgba(255, 255, 255, 0.98) !important; }
+        body.theme-white .bg-slate-800\\/80 { background-color: rgba(255, 255, 255, 0.95) !important; }
+        body.theme-white .bg-slate-800\\/50 { background-color: rgba(248, 249, 250, 1) !important; }
+        body.theme-white .bg-slate-800\\/40 { background-color: rgba(248, 249, 250, 1) !important; }
+        body.theme-white .bg-slate-800\\/30 { background-color: rgba(248, 249, 250, 0.9) !important; }
+        body.theme-white .bg-slate-700\\/50 { background-color: rgba(248, 249, 250, 0.9) !important; }
+        body.theme-white .bg-slate-700\\/30 { background-color: rgba(248, 249, 250, 0.8) !important; }
+
+        /* Gray 颜色系列 */
+        body.theme-white .bg-gray-950 { background-color: #ffffff !important; }
         body.theme-white .bg-gray-900 { background-color: #ffffff !important; }
         body.theme-white .bg-gray-800 { background-color: #f8f9fa !important; }
+        body.theme-white .bg-gray-700 { background-color: #f1f5f9 !important; }
+
+        /* 文字颜色 */
         body.theme-white .text-white { color: #000000 !important; }
-        body.theme-white .text-slate-400 { color: #64748b !important; }
+        body.theme-white .text-slate-100 { color: #1e293b !important; }
+        body.theme-white .text-slate-200 { color: #334155 !important; }
         body.theme-white .text-slate-300 { color: #475569 !important; }
+        body.theme-white .text-slate-400 { color: #64748b !important; }
         body.theme-white .text-slate-500 { color: #64748b !important; }
         body.theme-white .text-slate-600 { color: #475569 !important; }
+        body.theme-white .text-gray-100 { color: #1e293b !important; }
+        body.theme-white .text-gray-200 { color: #334155 !important; }
+        body.theme-white .text-gray-300 { color: #475569 !important; }
+        body.theme-white .text-gray-400 { color: #64748b !important; }
+        body.theme-white .text-gray-500 { color: #64748b !important; }
+
+        /* 边框颜色 */
+        body.theme-white .border-slate-900 { border-color: #e2e8f0 !important; }
+        body.theme-white .border-slate-800 { border-color: #e2e8f0 !important; }
+        body.theme-white .border-slate-700 { border-color: #cbd5e1 !important; }
         body.theme-white .border-slate-800\\/50 { border-color: #e2e8f0 !important; }
         body.theme-white .border-slate-700\\/50 { border-color: #cbd5e1 !important; }
-        body.theme-white .border-slate-700 { border-color: #cbd5e1 !important; }
-        body.theme-white .border-slate-800 { border-color: #e2e8f0 !important; }
+
+        /* Hover 状态 */
+        body.theme-white .hover\\:bg-slate-900:hover { background-color: #f8f9fa !important; }
         body.theme-white .hover\\:bg-slate-800:hover { background-color: #f1f5f9 !important; }
+        body.theme-white .hover\\:bg-slate-700:hover { background-color: #e2e8f0 !important; }
         body.theme-white .hover\\:bg-slate-700\\/50:hover { background-color: rgba(241, 245, 249, 0.8) !important; }
         body.theme-white .hover\\:bg-slate-700\\/30:hover { background-color: rgba(241, 245, 249, 0.6) !important; }
+        body.theme-white .hover\\:text-white:hover { color: #000000 !important; }
 
         .scrollbar-hide::-webkit-scrollbar {
           display: none;
