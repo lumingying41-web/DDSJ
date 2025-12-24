@@ -123,15 +123,37 @@ export default function PaymentQRCode() {
                   </div>
                 )}
                 
-                {/* 支付宝二维码 */}
-                {method === 'alipay' && qrUrl && (
+                {/* 支付宝支付 */}
+                {method === 'alipay' && (
                   <div className="mb-6">
-                    <div className="inline-block p-4 bg-white rounded-xl">
-                      <img src={qrUrl} alt="支付二维码" className="w-64 h-64" />
-                    </div>
-                    <p className="text-slate-400 mt-4">
-                      请使用支付宝扫描二维码完成支付
-                    </p>
+                    {qrUrl && (
+                      <>
+                        <div className="inline-block p-4 bg-white rounded-xl mb-4">
+                          <img src={qrUrl} alt="支付二维码" className="w-64 h-64" />
+                        </div>
+                        <p className="text-slate-400 mb-4">
+                          请使用支付宝扫描二维码完成支付
+                        </p>
+                      </>
+                    )}
+                    
+                    {paymentUrl && (
+                      <div className="mt-4">
+                        <p className="text-slate-400 mb-3">或</p>
+                        <a 
+                          href={paymentUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <Button className="bg-blue-500 hover:bg-blue-400 text-white">
+                            点击打开支付宝支付
+                          </Button>
+                        </a>
+                        <p className="text-xs text-slate-500 mt-2">
+                          沙箱测试：请在新窗口中使用沙箱账号登录支付
+                        </p>
+                      </div>
+                    )}
                   </div>
                 )}
                 
