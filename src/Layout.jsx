@@ -61,10 +61,18 @@ export default function Layout({ children, currentPageName }) {
       dark: { bg: '#070D18', card: '#0F1A2E' },
       blue: { bg: '#0A1628', card: '#132744' },
       purple: { bg: '#1a0b2e', card: '#2d1b4e' },
-      green: { bg: '#0d1f17', card: '#1a3d2e' }
+      green: { bg: '#0d1f17', card: '#1a3d2e' },
+      white: { bg: '#ffffff', card: '#f8f9fa' }
     };
     const colors = themes[theme] || themes.dark;
     document.body.style.backgroundColor = colors.bg;
+    
+    // Apply text color for white theme
+    if (theme === 'white') {
+      document.body.style.color = '#000000';
+    } else {
+      document.body.style.color = '#ffffff';
+    }
   };
   
   const isPremiumUser = subscription?.plan !== 'free' && subscription?.status === 'active';

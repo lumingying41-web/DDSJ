@@ -8,7 +8,7 @@ import { format } from 'date-fns';
 import { zhCN } from 'date-fns/locale';
 import { 
   ArrowLeft, Clock, Share2, Bookmark, BookmarkCheck, 
-  Building2, FileDown, ExternalLink, Lock, Crown
+  Building2, FileDown, ExternalLink, Lock, Crown, Download
 } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -140,6 +140,25 @@ export default function ReportDetail() {
             </Button>
           </Link>
           <div className="flex items-center gap-2">
+            {isPremiumUser && (
+              <Button 
+                variant="ghost" 
+                size="icon"
+                onClick={() => {
+                  const content = `# ${report.title}\n\n**机构**: ${report.institution}\n**类型**: ${institutionTypeLabels[report.institution_type]}\n**报告类型**: ${reportTypeLabels[report.report_type]}\n**发布时间**: ${format(new Date(report.published_at || report.created_date), 'yyyy年MM月dd日', { locale: zhCN })}\n\n## 摘要\n${report.summary || ''}\n\n## 核心要点\n${report.key_points?.map((p, i) => `${i + 1}. ${p}`).join('\n') || ''}\n\n---\n\n${report.content || ''}`;
+                  const blob = new Blob([content], { type: 'text/markdown' });
+                  const url = URL.createObjectURL(blob);
+                  const a = document.createElement('a');
+                  a.href = url;
+                  a.download = `${report.institution}-${report.title}.md`;
+                  a.click();
+                }}
+                className="text-slate-400 hover:text-white"
+                title="下载报告"
+              >
+                <Download className="w-5 h-5" />
+              </Button>
+            )}
             <Button 
               variant="ghost" 
               size="icon"

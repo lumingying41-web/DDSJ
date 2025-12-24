@@ -15,6 +15,8 @@ export default function Home() {
   const [user, setUser] = useState(null);
   const [subscription, setSubscription] = useState(null);
   const [isLive, setIsLive] = useState(true);
+  const [newNewsCount, setNewNewsCount] = useState(0);
+  const [lastFetchedIds, setLastFetchedIds] = useState([]);
   
   useEffect(() => {
     const loadUser = async () => {
@@ -66,6 +68,16 @@ export default function Home() {
         allNews = allNews.filter(news => news.sentiment === activeSentiment);
       }
 
+      // Check for new news
+      const currentIds = allNews.map(n => n.id);
+      if (lastFetchedIds.length > 0) {
+        const newIds = currentIds.filter(id => !lastFetchedIds.includes(id));
+        if (newIds.length > 0 && !isLive) {
+          setNewNewsCount(newIds.length);
+        }
+      }
+      setLastFetchedIds(currentIds);
+
       return allNews.slice(0, 50);
     },
   });
@@ -109,10 +121,18 @@ export default function Home() {
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={() => refetch()}
-                className="text-slate-400 hover:text-white"
+                onClick={() => {
+                  setNewNewsCount(0);
+                  refetch();
+                }}
+                className="text-slate-400 hover:text-white relative"
               >
                 <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
+                {newNewsCount > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-amber-500 text-black text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                    {newNewsCount}
+                  </span>
+                )}
               </Button>
             </div>
           </div>

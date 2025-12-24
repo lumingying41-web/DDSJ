@@ -8,7 +8,7 @@ import { format } from 'date-fns';
 import { zhCN } from 'date-fns/locale';
 import { 
   ArrowLeft, Clock, Share2, Bookmark, BookmarkCheck, 
-  TrendingUp, TrendingDown, Target, User, BookOpen, Lock, Crown
+  TrendingUp, TrendingDown, Target, User, BookOpen, Lock, Crown, Download
 } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -137,6 +137,25 @@ export default function ResearchDetail() {
             </Button>
           </Link>
           <div className="flex items-center gap-2">
+            {isPremiumUser && (
+              <Button 
+                variant="ghost" 
+                size="icon"
+                onClick={() => {
+                  const content = `# ${research.title}\n\n## 股票: ${research.stock_symbol} - ${research.stock_name}\n\n**评级**: ${rating.label}\n${research.target_price ? `**目标价**: $${research.target_price}\n` : ''}\n**发布时间**: ${format(new Date(research.published_at || research.created_date), 'yyyy年MM月dd日', { locale: zhCN })}\n\n---\n\n${research.content || research.summary}`;
+                  const blob = new Blob([content], { type: 'text/markdown' });
+                  const url = URL.createObjectURL(blob);
+                  const a = document.createElement('a');
+                  a.href = url;
+                  a.download = `${research.stock_symbol}-${research.title}.md`;
+                  a.click();
+                }}
+                className="text-slate-400 hover:text-white"
+                title="下载研报"
+              >
+                <Download className="w-5 h-5" />
+              </Button>
+            )}
             <Button 
               variant="ghost" 
               size="icon"

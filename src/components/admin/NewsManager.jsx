@@ -142,11 +142,13 @@ export default function NewsManager() {
                 <SelectValue placeholder="分类" />
               </SelectTrigger>
               <SelectContent className="bg-slate-800 border-slate-700">
+                <SelectItem value="comprehensive">综合</SelectItem>
                 <SelectItem value="earnings">财报</SelectItem>
                 <SelectItem value="fed">美联储</SelectItem>
                 <SelectItem value="analyst">分析师</SelectItem>
                 <SelectItem value="macro">宏观</SelectItem>
                 <SelectItem value="ipo">IPO</SelectItem>
+                <SelectItem value="risk_warning">风险预警</SelectItem>
                 <SelectItem value="merger">并购</SelectItem>
                 <SelectItem value="policy">政策</SelectItem>
                 <SelectItem value="other">其他</SelectItem>
