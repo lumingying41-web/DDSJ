@@ -56,23 +56,13 @@ export default function Layout({ children, currentPageName }) {
   }, []);
 
   const applyTheme = (theme) => {
-    const root = document.documentElement;
-    const themes = {
-      dark: { bg: '#070D18', card: '#0F1A2E' },
-      blue: { bg: '#0A1628', card: '#132744' },
-      purple: { bg: '#1a0b2e', card: '#2d1b4e' },
-      green: { bg: '#0d1f17', card: '#1a3d2e' },
-      white: { bg: '#ffffff', card: '#f8f9fa' }
-    };
-    const colors = themes[theme] || themes.dark;
-    document.body.style.backgroundColor = colors.bg;
+    const body = document.body;
     
-    // Apply text color for white theme
-    if (theme === 'white') {
-      document.body.style.color = '#000000';
-    } else {
-      document.body.style.color = '#ffffff';
-    }
+    // 移除所有主题类
+    body.classList.remove('theme-dark', 'theme-blue', 'theme-purple', 'theme-green', 'theme-white');
+    
+    // 添加新主题类
+    body.classList.add(`theme-${theme || 'dark'}`);
   };
   
   const isPremiumUser = subscription?.plan !== 'free' && subscription?.status === 'active';
@@ -104,12 +94,61 @@ export default function Layout({ children, currentPageName }) {
           --input: 217.2 32.6% 17.5%;
           --ring: 47.9 95.8% 53.1%;
         }
-        
-        body {
+
+        /* 深夜黑主题 (默认) */
+        body, body.theme-dark {
           background-color: #070D18;
           color: white;
         }
-        
+        body.theme-dark .bg-\\[\\#070D18\\] { background-color: #070D18 !important; }
+        body.theme-dark .bg-\\[\\#0F1A2E\\] { background-color: #0F1A2E !important; }
+
+        /* 海洋蓝主题 */
+        body.theme-blue {
+          background-color: #0A1628;
+          color: white;
+        }
+        body.theme-blue .bg-\\[\\#070D18\\] { background-color: #0A1628 !important; }
+        body.theme-blue .bg-\\[\\#0F1A2E\\] { background-color: #132744 !important; }
+        body.theme-blue .bg-slate-800\\/40 { background-color: rgba(30, 58, 95, 0.4) !important; }
+        body.theme-blue .bg-slate-800\\/50 { background-color: rgba(30, 58, 95, 0.5) !important; }
+
+        /* 星云紫主题 */
+        body.theme-purple {
+          background-color: #1a0b2e;
+          color: white;
+        }
+        body.theme-purple .bg-\\[\\#070D18\\] { background-color: #1a0b2e !important; }
+        body.theme-purple .bg-\\[\\#0F1A2E\\] { background-color: #2d1b4e !important; }
+        body.theme-purple .bg-slate-800\\/40 { background-color: rgba(69, 39, 108, 0.4) !important; }
+        body.theme-purple .bg-slate-800\\/50 { background-color: rgba(69, 39, 108, 0.5) !important; }
+
+        /* 森林绿主题 */
+        body.theme-green {
+          background-color: #0d1f17;
+          color: white;
+        }
+        body.theme-green .bg-\\[\\#070D18\\] { background-color: #0d1f17 !important; }
+        body.theme-green .bg-\\[\\#0F1A2E\\] { background-color: #1a3d2e !important; }
+        body.theme-green .bg-slate-800\\/40 { background-color: rgba(38, 70, 54, 0.4) !important; }
+        body.theme-green .bg-slate-800\\/50 { background-color: rgba(38, 70, 54, 0.5) !important; }
+
+        /* 简约白主题 */
+        body.theme-white {
+          background-color: #ffffff;
+          color: #000000;
+        }
+        body.theme-white .bg-\\[\\#070D18\\] { background-color: #f8f9fa !important; }
+        body.theme-white .bg-\\[\\#0F1A2E\\] { background-color: #ffffff !important; }
+        body.theme-white .text-white { color: #000000 !important; }
+        body.theme-white .text-slate-400 { color: #6b7280 !important; }
+        body.theme-white .text-slate-300 { color: #374151 !important; }
+        body.theme-white .bg-slate-800\\/40 { background-color: rgba(241, 245, 249, 0.8) !important; }
+        body.theme-white .bg-slate-800\\/50 { background-color: rgba(241, 245, 249, 0.9) !important; }
+        body.theme-white .bg-slate-800\\/30 { background-color: rgba(241, 245, 249, 0.6) !important; }
+        body.theme-white .border-slate-800\\/50 { border-color: rgba(226, 232, 240, 0.8) !important; }
+        body.theme-white .border-slate-700\\/50 { border-color: rgba(203, 213, 225, 0.8) !important; }
+
         .scrollbar-hide::-webkit-scrollbar {
           display: none;
         }
