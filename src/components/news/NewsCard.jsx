@@ -43,9 +43,9 @@ export default function NewsCard({ news, isPremiumUser = false }) {
       className="block"
     >
       <div className={`
-        group relative bg-[#0F1A2E]/80 backdrop-blur-sm border border-slate-700/50 
+        group relative bg-slate-800/80 backdrop-blur-sm border border-slate-700/50 
         rounded-xl p-4 hover:border-amber-500/30 transition-all duration-300
-        hover:bg-[#0F1A2E] hover:shadow-lg hover:shadow-amber-500/5
+        hover:bg-slate-800 hover:shadow-lg hover:shadow-amber-500/5
         ${isLocked ? 'opacity-75' : ''}
       `}>
         {/* Top Row - Time & Importance */}
