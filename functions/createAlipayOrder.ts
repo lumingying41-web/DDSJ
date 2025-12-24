@@ -55,33 +55,55 @@ Deno.serve(async (req) => {
       order_number: orderNumber
     });
     
-    // 使用网页支付接口（沙箱环境）
-    console.log('开始调用支付宝API...');
+    // 沙箱环境：手动构建支付URL（不使用SDK的exec，直接构建）
+    console.log('开始构建支付宝支付链接...');
     
-    // 使用 pageExecute 方法，返回完整的HTML表单，但我们从中提取URL
-    const formData = new AlipayFormData();
-    formData.setMethod('get');
-    formData.addField('notifyUrl', `${new URL(req.url).origin}/api/functions/alipayCallback`);
-    formData.addField('returnUrl', `${new URL(req.url).origin}`);
-    formData.addField('bizContent', {
+    const timestamp = new Date().toISOString().replace('T', ' ').substring(0, 19);
+    const bizContent = JSON.stringify({
       out_trade_no: orderNumber,
       total_amount: amount.toString(),
       subject: `顶点视角会员-${plan === 'monthly' ? '月度' : plan === 'yearly' ? '年度' : '终身'}`,
-      product_code: 'FAST_INSTANT_TRADE_PAY',
-      timeout_express: '15m',
+      product_code: 'FAST_INSTANT_TRADE_PAY'
     });
-
-    const result = await alipaySdk.exec(
-      'alipay.trade.page.pay',
-      {},
-      { formData: formData }
-    );
-
-    console.log('SDK返回:', result);
-
-    if (result) {
-      // result 是完整的URL字符串（使用GET方法时）
-      const payUrl = `https://openapi-sandbox.dl.alipaydev.com/gateway.do?${result}`;
+    
+    // 构建请求参数
+    const params = {
+      app_id: '9021000158673541',
+      method: 'alipay.trade.page.pay',
+      format: 'JSON',
+      charset: 'utf-8',
+      sign_type: 'RSA2',
+      timestamp: timestamp,
+      version: '1.0',
+      notify_url: `${new URL(req.url).origin}/api/functions/alipayCallback`,
+      return_url: `${new URL(req.url).origin}`,
+      biz_content: bizContent
+    };
+    
+    // 使用SDK的签名功能
+    const signStr = Object.keys(params)
+      .sort()
+      .map(key => `${key}=${params[key]}`)
+      .join('&');
+    
+    // 简单方式：使用SDK exec但获取URL参数
+    try {
+      const formData = new AlipayFormData();
+      formData.setMethod('get');
+      formData.addField('notifyUrl', params.notify_url);
+      formData.addField('returnUrl', params.return_url);
+      formData.addField('bizContent', {
+        out_trade_no: orderNumber,
+        total_amount: amount.toString(),
+        subject: `顶点视角会员-${plan === 'monthly' ? '月度' : plan === 'yearly' ? '年度' : '终身'}`,
+        product_code: 'FAST_INSTANT_TRADE_PAY'
+      });
+      
+      const urlParams = await alipaySdk.exec('alipay.trade.page.pay', {}, { formData });
+      const payUrl = `https://openapi-sandbox.dl.alipaydev.com/gateway.do?${urlParams}`;
+      
+      console.log('生成的支付链接:', payUrl);
+      
       const qrImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(payUrl)}`;
       
       return Response.json({
@@ -94,8 +116,9 @@ Deno.serve(async (req) => {
         amount: amount,
         expires_at: new Date(Date.now() + 15 * 60 * 1000).toISOString()
       });
-    } else {
-      throw new Error('Failed to create alipay order: ' + JSON.stringify(result));
+    } catch (error) {
+      console.error('生成支付链接失败:', error);
+      throw error;
     }
   } catch (error) {
     console.error('Error creating alipay order:', error);
