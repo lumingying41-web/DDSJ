@@ -33,6 +33,18 @@ export default function Layout({ children, currentPageName }) {
     };
     window.addEventListener('error', handleError);
     
+    // Register Service Worker for PWA
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker
+        .register('/service-worker.js')
+        .then((registration) => {
+          console.log('Service Worker registered:', registration);
+        })
+        .catch((error) => {
+          console.log('Service Worker registration failed:', error);
+        });
+    }
+    
     return () => window.removeEventListener('error', handleError);
   }, []);
   

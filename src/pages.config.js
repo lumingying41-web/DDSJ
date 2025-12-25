@@ -1,4 +1,5 @@
 import Admin from './pages/Admin';
+import Feedback from './pages/Feedback';
 import Home from './pages/Home';
 import Institution from './pages/Institution';
 import LanguageSelector from './pages/LanguageSelector';
@@ -13,12 +14,12 @@ import Research from './pages/Research';
 import ResearchDetail from './pages/ResearchDetail';
 import Search from './pages/Search';
 import Subscription from './pages/Subscription';
-import Feedback from './pages/Feedback';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
     "Admin": Admin,
+    "Feedback": Feedback,
     "Home": Home,
     "Institution": Institution,
     "LanguageSelector": LanguageSelector,
@@ -33,7 +34,6 @@ export const PAGES = {
     "ResearchDetail": ResearchDetail,
     "Search": Search,
     "Subscription": Subscription,
-    "Feedback": Feedback,
 }
 
 export const pagesConfig = {
