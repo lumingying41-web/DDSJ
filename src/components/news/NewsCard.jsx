@@ -1,8 +1,7 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { createPageUrl } from '@/utils';
+import React, { useState } from 'react';
 import { Badge } from "@/components/ui/badge";
-import { TrendingUp, TrendingDown, Minus, Clock, Zap, AlertTriangle } from 'lucide-react';
+import { Button } from "@/components/ui/button";
+import { TrendingUp, TrendingDown, Minus, Clock, Zap, AlertTriangle, ChevronDown, ChevronUp } from 'lucide-react';
 import { format } from 'date-fns';
 import { zhCN } from 'date-fns/locale';
 
@@ -30,6 +29,8 @@ const importanceConfig = {
 };
 
 export default function NewsCard({ news, isPremiumUser = false }) {
+  const [isExpanded, setIsExpanded] = useState(false);
+  
   const sentiment = sentimentConfig[news.sentiment] || sentimentConfig.neutral;
   const SentimentIcon = sentiment.icon;
   const importance = importanceConfig[news.importance] || importanceConfig.low;
@@ -38,7 +39,7 @@ export default function NewsCard({ news, isPremiumUser = false }) {
   const isLocked = news.is_premium && !isPremiumUser;
   const fullContent = news.content || news.summary || '';
   const isLongContent = fullContent.length > 500;
-  const displayContent = isLongContent ? fullContent.substring(0, 500) + '...' : fullContent;
+  const displayContent = isExpanded ? fullContent : (isLongContent ? fullContent.substring(0, 500) + '...' : fullContent);
   
   return (
     <div className={`
@@ -81,16 +82,6 @@ export default function NewsCard({ news, isPremiumUser = false }) {
           {displayContent}
         </div>
         
-        {/* Read More Button for Long Content */}
-        {isLongContent && !isLocked && (
-          <Link 
-            to={createPageUrl(`NewsDetail?id=${news.id}`)}
-            className="inline-flex items-center gap-1 text-sm text-amber-400 hover:text-amber-300 transition-colors mb-3"
-          >
-            查看全文 →
-          </Link>
-        )}
-        
         {/* Key Points */}
         {!isLocked && news.key_points && news.key_points.length > 0 && (
           <div className="space-y-2 mb-3 bg-slate-900/50 rounded-lg p-3 border border-slate-700/30">
@@ -119,6 +110,28 @@ export default function NewsCard({ news, isPremiumUser = false }) {
             {sentiment.label}
           </Badge>
         </div>
+        
+        {/* Expand/Collapse Button */}
+        {isLongContent && !isLocked && (
+          <div className="mt-3 pt-3 border-t border-slate-700/50">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setIsExpanded(!isExpanded)}
+              className="w-full text-amber-400 hover:text-amber-300 hover:bg-slate-700/50"
+            >
+              {isExpanded ? (
+                <>
+                  收起 <ChevronUp className="w-4 h-4 ml-1" />
+                </>
+              ) : (
+                <>
+                  查看全文 <ChevronDown className="w-4 h-4 ml-1" />
+                </>
+              )}
+            </Button>
+          </div>
+        )}
       </div>
   );
 }
