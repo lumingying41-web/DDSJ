@@ -37,25 +37,31 @@ export default function Home() {
   
   const isPremiumUser = subscription?.plan !== 'free' && subscription?.status === 'active';
   
+  const [isSyncing, setIsSyncing] = useState(false);
+
+  const syncAllSources = async () => {
+    setIsSyncing(true);
+    try {
+      await Promise.all([
+        base44.functions.invoke('syncFinancialNews', {}),
+        base44.functions.invoke('getEastMoneyUSStocks', {}),
+        base44.functions.invoke('getFinnhubNews', { category: 'general' }),
+        base44.functions.invoke('getNewsAPIArticles', { 
+          query: 'stock market OR finance OR Wall Street',
+          language: 'en'
+        }),
+        base44.functions.invoke('getYahooFinanceNews', {})
+      ]);
+    } catch (e) {
+      console.error('Failed to sync news:', e);
+    } finally {
+      setIsSyncing(false);
+    }
+  };
+
   const { data: newsFlash = [], isLoading, refetch } = useQuery({
     queryKey: ['newsFlash', activeCategory, activeSentiment],
     queryFn: async () => {
-      // 同步多个数据源的最新新闻
-      try {
-        await Promise.all([
-          base44.functions.invoke('syncFinancialNews', {}),
-          base44.functions.invoke('getEastMoneyUSStocks', {}),
-          base44.functions.invoke('getFinnhubNews', { category: 'general' }),
-          base44.functions.invoke('getNewsAPIArticles', { 
-            query: 'stock market OR finance OR Wall Street',
-            language: 'en'
-          }),
-          base44.functions.invoke('getYahooFinanceNews', {})
-        ]);
-      } catch (e) {
-        console.error('Failed to sync news:', e);
-      }
-
       // 获取今天的开始时间
       const today = new Date();
       today.setHours(0, 0, 0, 0);
@@ -97,15 +103,20 @@ export default function Home() {
     },
   });
 
-      useEffect(() => {
-      // 自动刷新快讯
-      if (isLive) {
+  useEffect(() => {
+    // 首次加载时同步数据
+    syncAllSources().then(() => refetch());
+  }, []);
+
+  useEffect(() => {
+    // 自动刷新快讯（只刷新显示，不同步数据源）
+    if (isLive) {
       const interval = setInterval(() => {
         refetch();
       }, 30000); // 每30秒自动刷新
       return () => clearInterval(interval);
-      }
-      }, [isLive, refetch]);
+    }
+  }, [isLive, refetch]);
 
   return (
     <div className="min-h-screen bg-[#070D18]">
@@ -136,13 +147,15 @@ export default function Home() {
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={() => {
+                onClick={async () => {
                   setNewNewsCount(0);
+                  await syncAllSources();
                   refetch();
                 }}
+                disabled={isSyncing}
                 className="text-slate-400 hover:text-white relative"
               >
-                <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
+                <RefreshCw className={`w-4 h-4 ${isSyncing || isLoading ? 'animate-spin' : ''}`} />
                 {newNewsCount > 0 && (
                   <span className="absolute -top-1 -right-1 bg-amber-500 text-black text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
                     {newNewsCount}
