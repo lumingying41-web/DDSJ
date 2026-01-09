@@ -67,6 +67,13 @@ export default function Home() {
         return newsDate >= today;
       });
 
+      // 按发布时间倒序排列（最新的在最上面）
+      allNews.sort((a, b) => {
+        const timeA = new Date(a.published_at || a.created_date).getTime();
+        const timeB = new Date(b.published_at || b.created_date).getTime();
+        return timeB - timeA;
+      });
+
       // 应用分类和情绪过滤
       if (activeCategory !== 'all') {
         allNews = allNews.filter(news => news.category === activeCategory);
