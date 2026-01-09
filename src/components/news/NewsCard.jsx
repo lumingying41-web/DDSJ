@@ -53,8 +53,12 @@ export default function NewsCard({ news, isPremiumUser = false }) {
                 : format(new Date(news.created_date), 'HH:mm', { locale: zhCN })
               }
             </span>
-            <span className="text-slate-600">·</span>
-            <span>顶点视角</span>
+            {news.source && (
+              <>
+                <span className="text-slate-600">·</span>
+                <span>{news.source}</span>
+              </>
+            )}
           </div>
           <div className="flex items-center gap-2">
             {ImportanceIcon && news.importance === 'high' && (
@@ -109,7 +113,18 @@ export default function NewsCard({ news, isPremiumUser = false }) {
             {sentiment.label}
           </Badge>
         </div>
-
+        
+        {/* Source Link */}
+        {news.source_url && (
+          <a 
+            href={news.source_url} 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="text-xs text-slate-500 hover:text-amber-400 transition-colors flex items-center gap-1 mt-2"
+          >
+            查看原文 →
+          </a>
+        )}
       </div>
   );
 }
