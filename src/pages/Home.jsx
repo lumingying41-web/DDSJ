@@ -40,10 +40,17 @@ export default function Home() {
   const { data: newsFlash = [], isLoading, refetch } = useQuery({
     queryKey: ['newsFlash', activeCategory, activeSentiment],
     queryFn: async () => {
-      // 先同步最新新闻
+      // 同步多个数据源的最新新闻
       try {
-        await base44.functions.invoke('syncFinancialNews', {});
-        await base44.functions.invoke('getEastMoneyUSStocks', {});
+        await Promise.all([
+          base44.functions.invoke('syncFinancialNews', {}),
+          base44.functions.invoke('getEastMoneyUSStocks', {}),
+          base44.functions.invoke('getFinnhubNews', { category: 'general' }),
+          base44.functions.invoke('getNewsAPIArticles', { 
+            query: 'stock market OR finance OR Wall Street',
+            language: 'en'
+          })
+        ]);
       } catch (e) {
         console.error('Failed to sync news:', e);
       }
@@ -51,15 +58,15 @@ export default function Home() {
       // 获取今天的开始时间
       const today = new Date();
       today.setHours(0, 0, 0, 0);
-      
+
       let allNews = await base44.entities.NewsFlash.list('-created_date', 200);
-      
+
       // 只保留今天的新闻
       allNews = allNews.filter(news => {
         const newsDate = new Date(news.published_at || news.created_date);
         return newsDate >= today;
       });
-      
+
       // 应用分类和情绪过滤
       if (activeCategory !== 'all') {
         allNews = allNews.filter(news => news.category === activeCategory);
