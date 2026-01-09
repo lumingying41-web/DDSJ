@@ -26,13 +26,22 @@ export default function Layout({ children, currentPageName }) {
   useEffect(() => {
     // Prevent ethereum property redefinition error
     const handleError = (event) => {
-      if (event.message && event.message.includes('ethereum')) {
+      if (event.message && (event.message.includes('ethereum') || event.message.includes('redefine'))) {
+        event.stopImmediatePropagation();
         event.preventDefault();
-        return true;
+        return false;
       }
     };
-    window.addEventListener('error', handleError);
-    
+
+    const handleUnhandledRejection = (event) => {
+      if (event.reason && event.reason.message && event.reason.message.includes('ethereum')) {
+        event.preventDefault();
+      }
+    };
+
+    window.addEventListener('error', handleError, true);
+    window.addEventListener('unhandledrejection', handleUnhandledRejection);
+
     // Register Service Worker for PWA
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker
@@ -44,8 +53,11 @@ export default function Layout({ children, currentPageName }) {
           console.log('Service Worker registration failed:', error);
         });
     }
-    
-    return () => window.removeEventListener('error', handleError);
+
+    return () => {
+      window.removeEventListener('error', handleError, true);
+      window.removeEventListener('unhandledrejection', handleUnhandledRejection);
+    };
   }, []);
   
   useEffect(() => {
