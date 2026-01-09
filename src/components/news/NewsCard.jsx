@@ -52,10 +52,7 @@ export default function NewsCard({ news, isPremiumUser = false }) {
           <div className="flex items-center gap-2 text-xs text-slate-500">
             <Clock className="w-3 h-3" />
             <span>
-              {news.published_at 
-                ? format(new Date(news.published_at), 'HH:mm', { locale: zhCN })
-                : format(new Date(news.created_date), 'HH:mm', { locale: zhCN })
-              }
+              {format(new Date(news.created_date), 'HH:mm', { locale: zhCN })}
             </span>
             <span className="text-slate-600">·</span>
             <span>顶点视角</span>
