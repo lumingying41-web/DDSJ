@@ -38,8 +38,8 @@ export default function NewsCard({ news, isPremiumUser = false }) {
   
   const isLocked = news.is_premium && !isPremiumUser;
   const fullContent = news.content || news.summary || '';
-  const isLongContent = fullContent.length > 500;
-  const displayContent = isExpanded ? fullContent : (isLongContent ? fullContent.substring(0, 500) + '...' : fullContent);
+  const isLongContent = fullContent.length > 100;
+  const displayContent = isExpanded ? fullContent : (isLongContent ? fullContent.substring(0, 100) + '...' : fullContent);
   
   return (
     <div className={`
