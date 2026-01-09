@@ -36,6 +36,9 @@ export default function NewsCard({ news, isPremiumUser = false }) {
   const ImportanceIcon = importance.icon;
   
   const isLocked = news.is_premium && !isPremiumUser;
+  const fullContent = news.content || news.summary || '';
+  const isLongContent = fullContent.length > 500;
+  const displayContent = isLongContent ? fullContent.substring(0, 500) + '...' : fullContent;
   
   return (
     <div className={`
@@ -73,10 +76,20 @@ export default function NewsCard({ news, isPremiumUser = false }) {
           {news.title}
         </h3>
         
-        {/* Full Content */}
+        {/* Content */}
         <div className={`text-sm text-slate-300 mb-3 leading-relaxed whitespace-pre-wrap ${isLocked ? 'blur-sm' : ''}`}>
-          {news.content || news.summary}
+          {displayContent}
         </div>
+        
+        {/* Read More Button for Long Content */}
+        {isLongContent && !isLocked && (
+          <Link 
+            to={createPageUrl(`NewsDetail?id=${news.id}`)}
+            className="inline-flex items-center gap-1 text-sm text-amber-400 hover:text-amber-300 transition-colors mb-3"
+          >
+            查看全文 →
+          </Link>
+        )}
         
         {/* Key Points */}
         {!isLocked && news.key_points && news.key_points.length > 0 && (
