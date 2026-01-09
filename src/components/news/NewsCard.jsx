@@ -38,16 +38,11 @@ export default function NewsCard({ news, isPremiumUser = false }) {
   const isLocked = news.is_premium && !isPremiumUser;
   
   return (
-    <Link 
-      to={createPageUrl(`NewsDetail?id=${news.id}`)}
-      className="block"
-    >
-      <div className={`
-        group relative bg-slate-800/80 backdrop-blur-sm border border-slate-700/50 
-        rounded-xl p-4 hover:border-amber-500/30 transition-all duration-300
-        hover:bg-slate-800 hover:shadow-lg hover:shadow-amber-500/5
-        ${isLocked ? 'opacity-75' : ''}
-      `}>
+    <div className={`
+      relative bg-slate-800/80 backdrop-blur-sm border border-slate-700/50 
+      rounded-xl p-4 transition-all duration-300
+      ${isLocked ? 'opacity-75' : ''}
+    `}>
         {/* Top Row - Time & Importance */}
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2 text-xs text-slate-500">
@@ -78,26 +73,23 @@ export default function NewsCard({ news, isPremiumUser = false }) {
         </div>
         
         {/* Title */}
-        <h3 className={`
-          text-base font-medium text-white mb-2 leading-relaxed
-          group-hover:text-amber-50 transition-colors
-          ${isLocked ? 'line-clamp-1' : 'line-clamp-2'}
-        `}>
+        <h3 className="text-base font-medium text-white mb-3 leading-relaxed">
           {news.title}
         </h3>
         
-        {/* Summary */}
-        <p className={`text-sm text-slate-400 mb-3 leading-relaxed ${isLocked ? 'blur-sm' : 'line-clamp-2'}`}>
-          {news.summary}
-        </p>
+        {/* Full Content */}
+        <div className={`text-sm text-slate-300 mb-3 leading-relaxed whitespace-pre-wrap ${isLocked ? 'blur-sm' : ''}`}>
+          {news.content || news.summary}
+        </div>
         
-        {/* Key Points Preview */}
+        {/* Key Points */}
         {!isLocked && news.key_points && news.key_points.length > 0 && (
-          <div className="space-y-1 mb-3">
-            {news.key_points.slice(0, 2).map((point, idx) => (
-              <div key={idx} className="flex items-start gap-2 text-xs text-slate-500">
-                <span className="text-amber-500 mt-0.5">•</span>
-                <span className="line-clamp-1">{point}</span>
+          <div className="space-y-2 mb-3 bg-slate-900/50 rounded-lg p-3 border border-slate-700/30">
+            <div className="text-xs text-amber-400 font-medium mb-2">关键要点</div>
+            {news.key_points.map((point, idx) => (
+              <div key={idx} className="flex items-start gap-2 text-sm text-slate-400">
+                <span className="text-amber-500 mt-1">•</span>
+                <span>{point}</span>
               </div>
             ))}
           </div>
@@ -121,7 +113,18 @@ export default function NewsCard({ news, isPremiumUser = false }) {
             {sentiment.label}
           </Badge>
         </div>
+        
+        {/* Source Link */}
+        {news.source_url && (
+          <a 
+            href={news.source_url} 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="text-xs text-slate-500 hover:text-amber-400 transition-colors flex items-center gap-1 mt-2"
+          >
+            查看原文 →
+          </a>
+        )}
       </div>
-    </Link>
   );
 }
