@@ -39,24 +39,28 @@ Deno.serve(async (req) => {
         const newsItems = [];
         for (const article of data.articles.slice(0, 30)) {
             try {
-                // 使用LLM提取关键信息
+                // 使用LLM翻译成中文并分析
                 const analysis = await base44.asServiceRole.integrations.Core.InvokeLLM({
-                    prompt: `分析这条财经新闻，提取关键信息：
-标题：${article.title}
-内容：${article.description || article.content || ''}
+                    prompt: `将以下英文财经新闻翻译成中文并分析：
+                标题：${article.title}
+                内容：${article.description || article.content || ''}
 
-请返回JSON格式：
-{
-  "summary": "一句话概括（中文，30字内）",
-  "sentiment": "bullish/bearish/neutral",
-  "category": "comprehensive/earnings/fed/analyst/macro/ipo/risk_warning/merger/policy/other",
-  "importance": "high/medium/low",
-  "related_stocks": ["股票代码数组，如果有的话"]
-}`,
+                请返回JSON格式（所有文本必须是中文）：
+                {
+                "title": "中文标题",
+                "summary": "中文摘要（一句话，30字内）",
+                "content": "完整中文内容",
+                "sentiment": "bullish/bearish/neutral",
+                "category": "comprehensive/earnings/fed/analyst/macro/ipo/risk_warning/merger/policy/other",
+                "importance": "high/medium/low",
+                "related_stocks": ["相关股票代码"]
+                }`,
                     response_json_schema: {
                         type: "object",
                         properties: {
+                            title: { type: "string" },
                             summary: { type: "string" },
+                            content: { type: "string" },
                             sentiment: { type: "string" },
                             category: { type: "string" },
                             importance: { type: "string" },
@@ -66,9 +70,9 @@ Deno.serve(async (req) => {
                 });
 
                 const newsFlash = await base44.asServiceRole.entities.NewsFlash.create({
-                    title: article.title,
+                    title: analysis.title,
                     summary: analysis.summary,
-                    content: article.description || article.content || article.title,
+                    content: analysis.content,
                     category: analysis.category,
                     sentiment: analysis.sentiment,
                     importance: analysis.importance,

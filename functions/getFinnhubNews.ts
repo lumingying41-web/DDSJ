@@ -35,16 +35,46 @@ Deno.serve(async (req) => {
         const newsItems = [];
         for (const article of articles.slice(0, 20)) {
             try {
+                // 使用LLM翻译成中文并分析
+                const analysis = await base44.asServiceRole.integrations.Core.InvokeLLM({
+                    prompt: `将以下英文财经新闻翻译成中文并分析：
+        标题：${article.headline}
+        内容：${article.summary || article.headline}
+
+        请返回JSON格式（所有文本必须是中文）：
+        {
+        "title": "中文标题",
+        "summary": "中文摘要（一句话，30字内）",
+        "content": "完整中文内容",
+        "sentiment": "bullish/bearish/neutral",
+        "category": "comprehensive/earnings/fed/analyst/macro/ipo/risk_warning/merger/policy/other",
+        "importance": "high/medium/low",
+        "related_stocks": ["相关股票代码"]
+        }`,
+                    response_json_schema: {
+                        type: "object",
+                        properties: {
+                            title: { type: "string" },
+                            summary: { type: "string" },
+                            content: { type: "string" },
+                            sentiment: { type: "string" },
+                            category: { type: "string" },
+                            importance: { type: "string" },
+                            related_stocks: { type: "array", items: { type: "string" } }
+                        }
+                    }
+                });
+
                 const newsFlash = await base44.asServiceRole.entities.NewsFlash.create({
-                    title: article.headline,
-                    summary: article.summary || article.headline,
-                    content: article.summary || article.headline,
-                    category: 'comprehensive',
-                    sentiment: 'neutral',
-                    importance: 'medium',
+                    title: analysis.title,
+                    summary: analysis.summary,
+                    content: analysis.content,
+                    category: analysis.category,
+                    sentiment: analysis.sentiment,
+                    importance: analysis.importance,
                     source: article.source,
                     source_url: article.url,
-                    related_stocks: article.related ? [article.related] : [],
+                    related_stocks: analysis.related_stocks || [],
                     published_at: new Date(article.datetime * 1000).toISOString(),
                     is_premium: false
                 });
