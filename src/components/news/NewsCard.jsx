@@ -107,9 +107,6 @@ export default function NewsCard({ news, isPremiumUser = false }) {
         {/* Bottom Row - Tags & Sentiment */}
         <div className="flex items-center justify-between pt-2 border-t border-slate-700/50">
           <div className="flex items-center gap-2 flex-wrap">
-            <Badge variant="outline" className="bg-slate-800/50 text-slate-300 border-slate-600 text-xs">
-              {categoryLabels[news.category] || news.category}
-            </Badge>
             {news.related_stocks?.slice(0, 2).map((stock, idx) => (
               <Badge key={idx} variant="outline" className="bg-blue-500/10 text-blue-400 border-blue-500/20 text-xs">
                 ${stock}
