@@ -4,13 +4,6 @@ import { TrendingUp, TrendingDown, Zap, Building2, LineChart, Globe, BarChart3 }
 
 const categories = [
   { id: 'all', label: '全部', icon: null },
-  { id: 'comprehensive', label: '综合', icon: Globe },
-  { id: 'earnings', label: '财报', icon: LineChart },
-  { id: 'fed', label: '美联储', icon: Building2 },
-  { id: 'analyst', label: '分析师', icon: TrendingUp },
-  { id: 'macro', label: '宏观', icon: BarChart3 },
-  { id: 'ipo', label: 'IPO', icon: Zap },
-  { id: 'risk_warning', label: '风险预警', icon: TrendingDown },
 ];
 
 const sentiments = [
