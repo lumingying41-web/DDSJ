@@ -49,7 +49,8 @@ export default function Home() {
           base44.functions.invoke('getNewsAPIArticles', { 
             query: 'stock market OR finance OR Wall Street',
             language: 'en'
-          })
+          }),
+          base44.functions.invoke('getYahooFinanceNews', {})
         ]);
       } catch (e) {
         console.error('Failed to sync news:', e);
