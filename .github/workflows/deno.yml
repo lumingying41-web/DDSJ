@@ -1,0 +1,61 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+# This workflow will install Deno then run `deno lint` and `deno test`.
+# For more information see: https://github.com/denoland/setup-deno
+
+name: Deno
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Setup repo
+        uses: actions/checkout@v4
+
+      - name: Setup Deno
+        # uses: denoland/setup-deno@v1
+        uses: denoland/setup-deno@61fe2df320078202e33d7d5ad347e7dcfa0e8f31  # v1.1.2
+        with:
+          deno-version: v1.x
+
+      # Uncomment this step to verify the use of 'deno fmt' on each commit.
+      # - name: Verify formatting
+      #   run: deno fmt --check
+
+      - name: Run linter
+        run: deno lint
+
+      - name: Run tests
+        run: deno test -A            - 名称：安装 .NET Core SDK
+  使用：actions/setup-dotnet@v5.0.1
+  和：
+    # 可选的 SDK 版本。如果未提供，则会在可用时安装 global.json 中的版本。例如：2.2.104、3.1、3.1.x、3.x、6.0.2xx
+    dotnet-version: # 可选
+    # 构建质量（可选）。可选值有：daily、signed、validated、preview、ga。
+    dotnet-quality: # 可选
+    # 可选的 global.json 位置，如果您的 global.json 不在存储库的根目录中。
+    global-json-file: # 可选
+    # 可选的包源，用于设置身份验证。将检查仓库根目录中任何现有的 NuGet.config 文件，并使用 NUGET_AUTH_TOKEN 环境变量作为明文密码提供一个临时的 NuGet.config 文件。
+    源 URL：# 可选
+    # 可选的 OWNER 参数，用于指定要使用的包来自 GitHub Package Registry 中的组织/用户，而非当前仓库的所有者。仅当 source-url 中同时提供了 GPR URL 时才使用。
+    所有者：# 可选
+    # 可选的 NuGet.config 位置，如果您的 NuGet.config 不在存储库的根目录中。
+    配置文件：# 可选
+    # 可选输入，用于启用 NuGet 全局包文件夹的缓存
+    缓存：# 可选
+    # 用于指定依赖文件 packages.lock.json 的路径。支持通配符或文件名列表，用于缓存多个依赖项。
+    cache-dependency-path: # 可选
+          
