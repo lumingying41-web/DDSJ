@@ -50,7 +50,8 @@ export default function Home() {
           query: 'stock market OR finance OR Wall Street',
           language: 'en'
         }),
-        base44.functions.invoke('getYahooFinanceNews', {})
+        base44.functions.invoke('getYahooFinanceNews', {}),
+        base44.functions.invoke('getITickNews', {})
       ]);
     } catch (e) {
       console.error('Failed to sync news:', e);
