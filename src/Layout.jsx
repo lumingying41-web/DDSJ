@@ -24,51 +24,70 @@ export default function Layout({ children, currentPageName }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   
   useEffect(() => {
-    // Block MetaMask/wallet initialization attempts
-    if (typeof window !== 'undefined') {
+    // Immediately block all wallet/MetaMask attempts
+    try {
+      if (window.ethereum) delete window.ethereum;
       Object.defineProperty(window, 'ethereum', {
         get: () => undefined,
         set: () => {},
-        configurable: false
+        configurable: false,
+        enumerable: false
       });
-    }
+    } catch (e) {}
 
-    // Comprehensive error suppression
+    // Ultra-aggressive error suppression
     const handleError = (event) => {
-      const msg = String(event.message || event.error || '');
-      const walletKeywords = ['ethereum', 'MetaMask', 'wallet', 'web3', 'crypto', 'redefine'];
-      if (walletKeywords.some(kw => msg.toLowerCase().includes(kw.toLowerCase()))) {
-        event.stopImmediatePropagation();
-        event.preventDefault();
-        return false;
-      }
+      try {
+        const msg = String(event.message || event.error?.message || event.error || event.reason || '').toLowerCase();
+        if (msg.includes('metamask') || msg.includes('ethereum') || msg.includes('wallet') || 
+            msg.includes('web3') || msg.includes('crypto') || msg.includes('redefine') || msg.includes('connect')) {
+          event.stopImmediatePropagation();
+          event.preventDefault();
+          event.stopPropagation();
+          return false;
+        }
+      } catch (e) {}
     };
 
     const handleUnhandledRejection = (event) => {
-      const reason = String(event.reason?.message || event.reason || '');
-      const walletKeywords = ['ethereum', 'MetaMask', 'wallet', 'web3'];
-      if (walletKeywords.some(kw => reason.toLowerCase().includes(kw.toLowerCase()))) {
-        event.preventDefault();
-        event.stopPropagation();
-      }
+      try {
+        const reason = String(event.reason?.message || event.reason || '').toLowerCase();
+        if (reason.includes('metamask') || reason.includes('ethereum') || reason.includes('wallet') || 
+            reason.includes('web3') || reason.includes('connect')) {
+          event.preventDefault();
+          event.stopImmediatePropagation();
+          event.stopPropagation();
+        }
+      } catch (e) {}
     };
 
-    // Suppress console errors
-    const originalConsoleError = console.error;
-    const originalConsoleWarn = console.warn;
+    // Override console methods
+    const originalError = console.error;
+    const originalWarn = console.warn;
+    const originalLog = console.log;
+    
     console.error = (...args) => {
-      const message = args.join(' ').toLowerCase();
-      if (message.includes('metamask') || message.includes('ethereum') || message.includes('wallet')) return;
-      originalConsoleError.apply(console, args);
+      const msg = args.join(' ').toLowerCase();
+      if (msg.includes('metamask') || msg.includes('ethereum') || msg.includes('wallet') || msg.includes('connect')) return;
+      originalError.apply(console, args);
     };
+    
     console.warn = (...args) => {
-      const message = args.join(' ').toLowerCase();
-      if (message.includes('metamask') || message.includes('ethereum') || message.includes('wallet')) return;
-      originalConsoleWarn.apply(console, args);
+      const msg = args.join(' ').toLowerCase();
+      if (msg.includes('metamask') || msg.includes('ethereum') || msg.includes('wallet') || msg.includes('connect')) return;
+      originalWarn.apply(console, args);
     };
 
+    console.log = (...args) => {
+      const msg = args.join(' ').toLowerCase();
+      if (msg.includes('metamask') || msg.includes('ethereum') || msg.includes('wallet') || msg.includes('connect')) return;
+      originalLog.apply(console, args);
+    };
+
+    // Register all error handlers with capture phase
     window.addEventListener('error', handleError, true);
     window.addEventListener('unhandledrejection', handleUnhandledRejection, true);
+    document.addEventListener('error', handleError, true);
 
     // Register Service Worker for PWA
     if ('serviceWorker' in navigator) {
@@ -85,8 +104,10 @@ export default function Layout({ children, currentPageName }) {
     return () => {
       window.removeEventListener('error', handleError, true);
       window.removeEventListener('unhandledrejection', handleUnhandledRejection, true);
-      console.error = originalConsoleError;
-      console.warn = originalConsoleWarn;
+      document.removeEventListener('error', handleError, true);
+      console.error = originalError;
+      console.warn = originalWarn;
+      console.log = originalLog;
     };
   }, []);
   
