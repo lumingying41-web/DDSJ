@@ -27,6 +27,16 @@ export default function Institution() {
   const [subscription, setSubscription] = useState(null);
   
   useEffect(() => {
+    // Suppress wallet errors
+    const handleError = (e) => {
+      const msg = e.message || '';
+      if (msg.includes('MetaMask') || msg.includes('wallet') || msg.includes('ethereum')) {
+        e.stopPropagation();
+        e.preventDefault();
+      }
+    };
+    window.addEventListener('error', handleError, true);
+
     const loadUser = async () => {
       try {
         const currentUser = await base44.auth.me();
@@ -37,6 +47,8 @@ export default function Institution() {
       } catch (e) {}
     };
     loadUser();
+
+    return () => window.removeEventListener('error', handleError, true);
   }, []);
   
   const isPremiumUser = subscription?.plan !== 'free' && subscription?.status === 'active';
