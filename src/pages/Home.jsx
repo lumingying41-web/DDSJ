@@ -63,22 +63,12 @@ export default function Home() {
   const { data: newsFlash = [], isLoading, refetch } = useQuery({
     queryKey: ['newsFlash', activeCategory, activeSentiment],
     queryFn: async () => {
-      // 获取今天的开始时间
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-
       let allNews = await base44.entities.NewsFlash.list('-created_date', 200);
 
-      // 只保留今天的新闻
-      allNews = allNews.filter(news => {
-        const newsDate = new Date(news.published_at || news.created_date);
-        return newsDate >= today;
-      });
-
-      // 按发布时间倒序排列（最新的在最上面）
+      // 按创建时间倒序排列（最新的在最上面）
       allNews.sort((a, b) => {
-        const timeA = new Date(a.published_at || a.created_date).getTime();
-        const timeB = new Date(b.published_at || b.created_date).getTime();
+        const timeA = new Date(a.created_date).getTime();
+        const timeB = new Date(b.created_date).getTime();
         return timeB - timeA;
       });
 
