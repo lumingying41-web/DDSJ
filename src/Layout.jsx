@@ -24,9 +24,11 @@ export default function Layout({ children, currentPageName }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   
   useEffect(() => {
-    // Prevent ethereum property redefinition error
+    // Suppress MetaMask and crypto wallet errors (not used in this app)
     const handleError = (event) => {
-      if (event.message && (event.message.includes('ethereum') || event.message.includes('redefine'))) {
+      const msg = event.message || '';
+      if (msg.includes('ethereum') || msg.includes('MetaMask') || msg.includes('redefine') || 
+          msg.includes('crypto') || msg.includes('wallet') || msg.includes('web3')) {
         event.stopImmediatePropagation();
         event.preventDefault();
         return false;
@@ -34,9 +36,21 @@ export default function Layout({ children, currentPageName }) {
     };
 
     const handleUnhandledRejection = (event) => {
-      if (event.reason && event.reason.message && event.reason.message.includes('ethereum')) {
+      const reason = event.reason?.message || event.reason || '';
+      if (typeof reason === 'string' && (reason.includes('ethereum') || reason.includes('MetaMask') || 
+          reason.includes('wallet') || reason.includes('web3'))) {
         event.preventDefault();
       }
+    };
+
+    // Suppress console errors for MetaMask
+    const originalConsoleError = console.error;
+    console.error = (...args) => {
+      const message = args.join(' ');
+      if (message.includes('MetaMask') || message.includes('ethereum') || message.includes('wallet')) {
+        return;
+      }
+      originalConsoleError.apply(console, args);
     };
 
     window.addEventListener('error', handleError, true);
@@ -57,6 +71,7 @@ export default function Layout({ children, currentPageName }) {
     return () => {
       window.removeEventListener('error', handleError, true);
       window.removeEventListener('unhandledrejection', handleUnhandledRejection);
+      console.error = originalConsoleError;
     };
   }, []);
   
