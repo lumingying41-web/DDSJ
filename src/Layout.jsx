@@ -23,6 +23,19 @@ export default function Layout({ children, currentPageName }) {
   const [subscription, setSubscription] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   
+  // Block MetaMask IMMEDIATELY before any other code runs
+  if (typeof window !== 'undefined') {
+    try {
+      delete window.ethereum;
+      Object.defineProperty(window, 'ethereum', {
+        get: () => undefined,
+        set: () => {},
+        configurable: false
+      });
+      window.web3 = undefined;
+    } catch (e) {}
+  }
+  
   useEffect(() => {
     // Immediately block all wallet/MetaMask attempts
     try {
