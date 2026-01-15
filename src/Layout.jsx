@@ -24,11 +24,20 @@ export default function Layout({ children, currentPageName }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   
   useEffect(() => {
-    // Suppress MetaMask and crypto wallet errors (not used in this app)
+    // Block MetaMask/wallet initialization attempts
+    if (typeof window !== 'undefined') {
+      Object.defineProperty(window, 'ethereum', {
+        get: () => undefined,
+        set: () => {},
+        configurable: false
+      });
+    }
+
+    // Comprehensive error suppression
     const handleError = (event) => {
-      const msg = event.message || '';
-      if (msg.includes('ethereum') || msg.includes('MetaMask') || msg.includes('redefine') || 
-          msg.includes('crypto') || msg.includes('wallet') || msg.includes('web3')) {
+      const msg = String(event.message || event.error || '');
+      const walletKeywords = ['ethereum', 'MetaMask', 'wallet', 'web3', 'crypto', 'redefine'];
+      if (walletKeywords.some(kw => msg.toLowerCase().includes(kw.toLowerCase()))) {
         event.stopImmediatePropagation();
         event.preventDefault();
         return false;
@@ -36,25 +45,30 @@ export default function Layout({ children, currentPageName }) {
     };
 
     const handleUnhandledRejection = (event) => {
-      const reason = event.reason?.message || event.reason || '';
-      if (typeof reason === 'string' && (reason.includes('ethereum') || reason.includes('MetaMask') || 
-          reason.includes('wallet') || reason.includes('web3'))) {
+      const reason = String(event.reason?.message || event.reason || '');
+      const walletKeywords = ['ethereum', 'MetaMask', 'wallet', 'web3'];
+      if (walletKeywords.some(kw => reason.toLowerCase().includes(kw.toLowerCase()))) {
         event.preventDefault();
+        event.stopPropagation();
       }
     };
 
-    // Suppress console errors for MetaMask
+    // Suppress console errors
     const originalConsoleError = console.error;
+    const originalConsoleWarn = console.warn;
     console.error = (...args) => {
-      const message = args.join(' ');
-      if (message.includes('MetaMask') || message.includes('ethereum') || message.includes('wallet')) {
-        return;
-      }
+      const message = args.join(' ').toLowerCase();
+      if (message.includes('metamask') || message.includes('ethereum') || message.includes('wallet')) return;
       originalConsoleError.apply(console, args);
+    };
+    console.warn = (...args) => {
+      const message = args.join(' ').toLowerCase();
+      if (message.includes('metamask') || message.includes('ethereum') || message.includes('wallet')) return;
+      originalConsoleWarn.apply(console, args);
     };
 
     window.addEventListener('error', handleError, true);
-    window.addEventListener('unhandledrejection', handleUnhandledRejection);
+    window.addEventListener('unhandledrejection', handleUnhandledRejection, true);
 
     // Register Service Worker for PWA
     if ('serviceWorker' in navigator) {
@@ -70,8 +84,9 @@ export default function Layout({ children, currentPageName }) {
 
     return () => {
       window.removeEventListener('error', handleError, true);
-      window.removeEventListener('unhandledrejection', handleUnhandledRejection);
+      window.removeEventListener('unhandledrejection', handleUnhandledRejection, true);
       console.error = originalConsoleError;
+      console.warn = originalConsoleWarn;
     };
   }, []);
   
