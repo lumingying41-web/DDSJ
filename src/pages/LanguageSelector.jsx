@@ -49,6 +49,45 @@ export default function LanguageSelector() {
   const [selectedLang, setSelectedLang] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
 
+  // 界面文字根据选择的语言动态显示
+  const getUIText = () => {
+    const lang = selectedLang?.code || 'zh-CN';
+    
+    const translations = {
+      'zh-CN': {
+        title: '选择您的语言',
+        subtitle: '选择您的首选语言',
+        continue: '继续',
+        processing: '处理中...',
+        changeLater: '您可以稍后在个人设置中更改'
+      },
+      'ja-JP': {
+        title: '言語を選択',
+        subtitle: '優先言語を選択してください',
+        continue: '続ける',
+        processing: '処理中...',
+        changeLater: '後でプロフィール設定で変更できます'
+      },
+      'ko-KR': {
+        title: '언어 선택',
+        subtitle: '원하는 언어를 선택하세요',
+        continue: '계속',
+        processing: '처리 중...',
+        changeLater: '나중에 프로필 설정에서 변경할 수 있습니다'
+      }
+    };
+    
+    return translations[lang] || {
+      title: 'Choose Your Language',
+      subtitle: 'Select your preferred language',
+      continue: 'Continue',
+      processing: 'Processing...',
+      changeLater: 'You can change this later in your profile settings'
+    };
+  };
+
+  const uiText = getUIText();
+
   const handleContinue = async () => {
     if (!selectedLang) return;
     
@@ -91,10 +130,10 @@ export default function LanguageSelector() {
             <Globe className="w-8 h-8 text-black" />
           </div>
           <h1 className="text-3xl font-bold text-white mb-2">
-            Choose Your Language
+            {uiText.title}
           </h1>
           <p className="text-slate-400">
-            选择您的语言 / Select your preferred language
+            {uiText.subtitle}
           </p>
         </div>
 
@@ -139,20 +178,16 @@ export default function LanguageSelector() {
           disabled={!selectedLang || isProcessing}
           className="w-full bg-amber-500 hover:bg-amber-400 text-black font-medium py-6 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {isProcessing ? (
-            'Processing...'
-          ) : (
+          {isProcessing ? uiText.processing : (
             <>
-              Continue
+              {uiText.continue}
               <ArrowRight className="w-5 h-5 ml-2" />
             </>
           )}
         </Button>
 
         <p className="text-center text-xs text-slate-500 mt-4">
-          You can change this later in your profile settings
-          <br />
-          您可以稍后在个人设置中更改
+          {uiText.changeLater}
         </p>
       </motion.div>
     </div>
