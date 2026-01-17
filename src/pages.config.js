@@ -1,4 +1,5 @@
 import Admin from './pages/Admin';
+import Community from './pages/Community';
 import Feedback from './pages/Feedback';
 import Home from './pages/Home';
 import Institution from './pages/Institution';
@@ -14,12 +15,12 @@ import Research from './pages/Research';
 import ResearchDetail from './pages/ResearchDetail';
 import Search from './pages/Search';
 import Subscription from './pages/Subscription';
-import Community from './pages/Community';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
     "Admin": Admin,
+    "Community": Community,
     "Feedback": Feedback,
     "Home": Home,
     "Institution": Institution,
@@ -35,7 +36,6 @@ export const PAGES = {
     "ResearchDetail": ResearchDetail,
     "Search": Search,
     "Subscription": Subscription,
-    "Community": Community,
 }
 
 export const pagesConfig = {

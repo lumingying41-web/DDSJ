@@ -6,6 +6,7 @@ import { Zap, RefreshCw, Bell, BellOff } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import NewsCard from '@/components/news/NewsCard';
+import TranslatedNewsCard from '@/components/news/TranslatedNewsCard';
 import NewsFilter from '@/components/news/NewsFilter';
 import SubscriptionBanner from '@/components/subscription/SubscriptionBanner';
 
@@ -196,7 +197,11 @@ export default function Home() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: idx * 0.05 }}
                 >
-                  <NewsCard news={news} isPremiumUser={isPremiumUser} />
+                  <TranslatedNewsCard 
+                    news={news} 
+                    isPremiumUser={isPremiumUser}
+                    targetLanguage={user?.language}
+                  />
                 </motion.div>
               ))}
             </AnimatePresence>
