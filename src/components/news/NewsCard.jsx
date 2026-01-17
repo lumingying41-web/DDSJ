@@ -28,7 +28,7 @@ const importanceConfig = {
   low: { color: 'text-slate-500' }
 };
 
-export default function NewsCard({ news, isPremiumUser = false }) {
+export default function NewsCard({ news, isPremiumUser = false, isTranslating = false }) {
   const [isExpanded, setIsExpanded] = useState(false);
   
   const sentiment = sentimentConfig[news.sentiment] || sentimentConfig.neutral;
@@ -70,7 +70,7 @@ export default function NewsCard({ news, isPremiumUser = false }) {
         </div>
         
         {/* Title */}
-        <h3 className="text-base font-medium text-white mb-3 leading-relaxed">
+        <h3 className={`text-base font-medium text-white mb-3 leading-relaxed ${isTranslating ? 'opacity-50 animate-pulse' : ''}`}>
           {news.title}
         </h3>
         
