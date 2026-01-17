@@ -23,6 +23,7 @@ export default function Home() {
     const loadUser = async () => {
       try {
         const currentUser = await base44.auth.me();
+        console.log('Current user language:', currentUser.language); // 调试日志
         setUser(currentUser);
         
         const subs = await base44.entities.Subscription.filter({ user_email: currentUser.email });

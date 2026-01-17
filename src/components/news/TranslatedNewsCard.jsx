@@ -8,6 +8,7 @@ export default function TranslatedNewsCard({ news, isPremiumUser, targetLanguage
 
   useEffect(() => {
     const translateNews = async () => {
+      console.log('Target language:', targetLanguage); // 调试日志
       if (!targetLanguage || targetLanguage === 'zh-CN') {
         setTranslatedNews(news);
         return;
