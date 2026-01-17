@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
 import { 
-  Zap, FileText, Building2, Search, User, Crown, Shield,
+  Zap, FileText, Building2, MessageCircle, User, Crown, Shield,
   Menu, X
 } from 'lucide-react';
 import { Button } from "@/components/ui/button";
@@ -14,7 +14,7 @@ const navItems = [
   { id: 'Home', label: '快讯', icon: Zap },
   { id: 'Research', label: '研报', icon: FileText },
   { id: 'Institution', label: '机构', icon: Building2 },
-  { id: 'Search', label: '搜索', icon: Search },
+  { id: 'Community', label: '讨论', icon: MessageCircle },
   { id: 'Profile', label: '我的', icon: User },
 ];
 

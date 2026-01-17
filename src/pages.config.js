@@ -14,6 +14,7 @@ import Research from './pages/Research';
 import ResearchDetail from './pages/ResearchDetail';
 import Search from './pages/Search';
 import Subscription from './pages/Subscription';
+import Community from './pages/Community';
 import __Layout from './Layout.jsx';
 
 
@@ -34,6 +35,7 @@ export const PAGES = {
     "ResearchDetail": ResearchDetail,
     "Search": Search,
     "Subscription": Subscription,
+    "Community": Community,
 }
 
 export const pagesConfig = {
