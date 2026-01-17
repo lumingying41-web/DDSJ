@@ -61,7 +61,7 @@ export default function Home() {
   };
 
   const { data: newsFlash = [], isLoading, refetch } = useQuery({
-    queryKey: ['newsFlash', activeCategory, activeSentiment, user?.language],
+    queryKey: ['newsFlash', activeCategory, activeSentiment],
     queryFn: async () => {
       let allNews = await base44.entities.NewsFlash.list('-created_date', 200);
 
@@ -90,22 +90,7 @@ export default function Home() {
       }
       setLastFetchedIds(currentIds);
 
-      let finalNews = allNews.slice(0, 50);
-
-      // 如果用户设置了非中文语言，翻译新闻
-      if (user?.language && user.language !== 'zh-CN') {
-        try {
-          const { data } = await base44.functions.invoke('translateNews', {
-            newsItems: finalNews,
-            targetLanguage: user.language
-          });
-          finalNews = data.translatedNews;
-        } catch (e) {
-          console.error('Translation failed:', e);
-        }
-      }
-
-      return finalNews;
+      return allNews.slice(0, 50);
     },
   });
 
