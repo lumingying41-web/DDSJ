@@ -6,7 +6,6 @@ import { Zap, RefreshCw, Bell, BellOff } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import NewsCard from '@/components/news/NewsCard';
-import TranslatedNewsCard from '@/components/news/TranslatedNewsCard';
 import NewsFilter from '@/components/news/NewsFilter';
 import SubscriptionBanner from '@/components/subscription/SubscriptionBanner';
 
@@ -23,7 +22,6 @@ export default function Home() {
     const loadUser = async () => {
       try {
         const currentUser = await base44.auth.me();
-        console.log('Current user language:', currentUser.language); // 调试日志
         setUser(currentUser);
         
         const subs = await base44.entities.Subscription.filter({ user_email: currentUser.email });
@@ -198,10 +196,9 @@ export default function Home() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: idx * 0.05 }}
                 >
-                  <TranslatedNewsCard 
+                  <NewsCard 
                     news={news} 
                     isPremiumUser={isPremiumUser}
-                    targetLanguage={user?.language}
                   />
                 </motion.div>
               ))}
