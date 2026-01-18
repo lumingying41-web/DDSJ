@@ -26,27 +26,38 @@ export default function Layout({ children, currentPageName }) {
   // Block MetaMask IMMEDIATELY before any other code runs
   if (typeof window !== 'undefined') {
     try {
-      delete window.ethereum;
-      Object.defineProperty(window, 'ethereum', {
-        get: () => undefined,
-        set: () => {},
-        configurable: false
-      });
+      if (!Object.getOwnPropertyDescriptor(window, 'ethereum')?.configurable) {
+        // Property already exists and is not configurable, skip
+      } else {
+        delete window.ethereum;
+        Object.defineProperty(window, 'ethereum', {
+          get: () => undefined,
+          set: () => {},
+          configurable: false
+        });
+      }
       window.web3 = undefined;
-    } catch (e) {}
+    } catch (e) {
+      // Silently ignore errors
+    }
   }
   
   useEffect(() => {
     // Immediately block all wallet/MetaMask attempts
     try {
-      if (window.ethereum) delete window.ethereum;
-      Object.defineProperty(window, 'ethereum', {
-        get: () => undefined,
-        set: () => {},
-        configurable: false,
-        enumerable: false
-      });
-    } catch (e) {}
+      const descriptor = Object.getOwnPropertyDescriptor(window, 'ethereum');
+      if (!descriptor || descriptor.configurable !== false) {
+        delete window.ethereum;
+        Object.defineProperty(window, 'ethereum', {
+          get: () => undefined,
+          set: () => {},
+          configurable: false,
+          enumerable: false
+        });
+      }
+    } catch (e) {
+      // Silently ignore
+    }
 
     // Ultra-aggressive error suppression
     const handleError = (event) => {
