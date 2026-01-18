@@ -6,6 +6,7 @@ import {
   Zap, FileText, Building2, MessageCircle, User, Crown, Shield,
   Menu, X
 } from 'lucide-react';
+import LanguageSwitcher from '@/components/common/LanguageSwitcher';
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { motion, AnimatePresence } from 'framer-motion';
@@ -343,6 +344,7 @@ export default function Layout({ children, currentPageName }) {
           </nav>
           
           <div className="flex items-center gap-3">
+            <LanguageSwitcher />
             {user ? (
               <Link to={createPageUrl('Profile')}>
                 <Button variant="ghost" size="sm" className="text-slate-400 hover:text-white">
@@ -373,13 +375,16 @@ export default function Layout({ children, currentPageName }) {
             />
             <span className="text-base font-bold text-white">顶点视角</span>
           </Link>
-          
-          {isPremiumUser && (
-            <Badge className="bg-amber-500/10 text-amber-400 border-amber-500/20 text-xs">
-              <Crown className="w-3 h-3 mr-1" />
-              PRO
-            </Badge>
-          )}
+
+          <div className="flex items-center gap-2">
+            <LanguageSwitcher />
+            {isPremiumUser && (
+              <Badge className="bg-amber-500/10 text-amber-400 border-amber-500/20 text-xs">
+                <Crown className="w-3 h-3 mr-1" />
+                PRO
+              </Badge>
+            )}
+          </div>
         </div>
       </header>
       
