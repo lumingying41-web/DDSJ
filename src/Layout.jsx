@@ -183,7 +183,6 @@ export default function Layout({ children, currentPageName }) {
         .goog-logo-link { display: none !important; }
         .goog-te-balloon-frame { display: none !important; }
 
-        `}
         :root {
           --background: 222.2 84% 4.9%;
           --foreground: 210 40% 98%;
