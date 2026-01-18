@@ -43,9 +43,48 @@ export default function LanguageSwitcher() {
     
     setIsChanging(true);
     try {
+      // 保存语言偏好
       await base44.auth.updateMe({ language: langCode });
       setCurrentLang(langCode);
-      window.location.reload(); // 刷新页面以应用翻译
+      
+      // 触发 Google Translate
+      const targetLang = langCode.split('-')[0]; // zh-CN -> zh, en-US -> en
+      
+      // 清除现有翻译
+      const existingScript = document.querySelector('.goog-te-banner-frame');
+      const existingSelect = document.querySelector('.goog-te-combo');
+      
+      if (existingSelect) {
+        existingSelect.value = targetLang;
+        existingSelect.dispatchEvent(new Event('change'));
+      } else {
+        // 初始化 Google Translate
+        if (!window.googleTranslateElementInit) {
+          window.googleTranslateElementInit = function() {
+            new window.google.translate.TranslateElement({
+              pageLanguage: 'zh-CN',
+              includedLanguages: 'zh-CN,zh-TW,en,ja,ko,es,fr,de',
+              layout: window.google.translate.TranslateElement.InlineLayout.SIMPLE,
+              autoDisplay: false
+            }, 'google_translate_element');
+          };
+          
+          const script = document.createElement('script');
+          script.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+          document.body.appendChild(script);
+          
+          // 等待加载完成后切换语言
+          script.onload = () => {
+            setTimeout(() => {
+              const select = document.querySelector('.goog-te-combo');
+              if (select) {
+                select.value = targetLang;
+                select.dispatchEvent(new Event('change'));
+              }
+            }, 1000);
+          };
+        }
+      }
     } catch (e) {
       console.error('Failed to change language:', e);
     } finally {

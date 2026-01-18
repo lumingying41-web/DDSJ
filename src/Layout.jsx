@@ -172,7 +172,18 @@ export default function Layout({ children, currentPageName }) {
 
   return (
     <div className="min-h-screen bg-[#070D18] text-white">
+      {/* Google Translate Container (Hidden) */}
+      <div id="google_translate_element" style={{ display: 'none' }}></div>
+
       <style>{`
+        /* 隐藏 Google Translate 工具栏 */
+        .goog-te-banner-frame.skiptranslate { display: none !important; }
+        body { top: 0px !important; }
+        .goog-te-gadget { display: none !important; }
+        .goog-logo-link { display: none !important; }
+        .goog-te-balloon-frame { display: none !important; }
+
+        `}
         :root {
           --background: 222.2 84% 4.9%;
           --foreground: 210 40% 98%;
